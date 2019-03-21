@@ -19,6 +19,14 @@ app.use("/api/users", require("./src/users/users.controller"));
 // usa un handler global para imprimir errores de peticion
 app.use(errorHandler);
 
+//ruta inicial
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "infinity has no beginning, no beginning can have no end"
+  });
+});
+
 // start server
 const port =
   process.env.NODE_ENV === "production" ? process.env.PORT || 80 : 4000;
