@@ -1,10 +1,14 @@
 require("rootpath")();
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const jwt = require("src/helpers/jwt");
+
 const errorHandler = require("src/helpers/error-handler");
+
+const routes = require("./src/routes");
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -14,17 +18,13 @@ app.use(cors());
 app.use(jwt());
 
 // aplica rutas con el controlador usuario
-app.use("/api/users", require("./src/users/users.controller"));
+routes(app);
 
 // usa un handler global para imprimir errores de peticion
 app.use(errorHandler);
 
-//ruta inicial
-
-app.get("/", (req, res) => {
-  res.json({
-    message: "infinity has no beginning, no beginning can have no end"
-  });
+app.use(function(req, res, next) {
+  return res.status(404).send({ message: "Route" + req.url + " Not found." });
 });
 
 // start server

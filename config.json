@@ -1,4 +1,0 @@
-{
-  "connectionString": "mongodb://localhost/eventify-api",
-  "secret": "apikeysecretoparalajwt"
-}

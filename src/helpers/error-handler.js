@@ -13,7 +13,8 @@ function errorHandler(err, req, res, next) {
 
   if (err.name === "UnauthorizedError") {
     // Error de autenticacion de JWT
-    return res.status(401).json({ message: "Invalid Token" });
+    console.log(err);
+    return res.status(401).json({ message: "Unauthenticated" });
   }
 
   // Error de servidor 500 por default

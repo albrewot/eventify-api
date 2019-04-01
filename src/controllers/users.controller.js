@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const userService = require("./user.service");
+const userService = require("../services/user.service");
 
 // Rutas para usuario
 router.post("/login", authenticate);
@@ -14,6 +14,7 @@ router.delete("/:id", _delete);
 module.exports = router;
 
 function authenticate(req, res, next) {
+  console.log("LOGIN |", req.body);
   userService
     .authenticate(req.body)
     .then(user =>
@@ -27,8 +28,11 @@ function authenticate(req, res, next) {
 function register(req, res, next) {
   userService
     .create(req.body)
-    .then(() => res.json({}))
-    .catch(err => next(err));
+    .then(() => res.json(req.body))
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
 }
 
 function getAll(req, res, next) {
