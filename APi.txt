@@ -50,7 +50,7 @@ RESPONSE = AUN NO TIENE, SERA UN CODIGO
 
 ##############################################################################
 
-ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/:id
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users
 REQUEST = GET
 EJEMPLO BODY = NO TIENE
 AUTH = SI
@@ -89,6 +89,44 @@ RESPONSE = ARREGLO DE USUARIOS [{
 ##############################################################################
 
 ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/:id
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = {
+    "username" : "oddly",
+    "password" : "$2b$10$UGcdIGifrcqIe9NsoSwAZeXK/X9hnA/CGvfhUkVi6/XFSUQU4Chsm",
+    "firstName" : "Gholazo",
+    "lastName": "wdawdawd",
+    "email" : "oddly@gmail.com",
+    "tlf" : [ 
+        {
+            "dial_code" : "+58",
+            "phone_number" : "4242611002"
+        }, 
+        {
+
+            "dial_code" : "+57",
+            "phone_number" : "4241640311"
+        }
+    ],
+    "country" : "Country",
+    "State": "State",
+    "City": "City",
+    "address" : [ 
+        {
+
+            "description" : "Mi casa"
+        }, 
+        {
+            "description" : "Mi otra casa"
+        }
+    ],
+    "token": "wadawdawdawdawdawdawd"
+}
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/current
 REQUEST = GET
 EJEMPLO BODY = NO TIENE
 AUTH = SI
