@@ -1,0 +1,698 @@
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/login
+REQUEST = POST
+AUTH = NO
+EJEMPLO BODY = {
+  username: string,
+  password: string
+}
+RESPONSE = {
+  JSON DE USUARIO + TOKEN DE ACCESO
+}
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/register
+REQUEST = POST
+AUTH = NO
+EJEMPLO BODY = {
+    "username" : "oddly",
+    "password" : "$2b$10$UGcdIGifrcqIe9NsoSwAZeXK/X9hnA/CGvfhUkVi6/XFSUQU4Chsm",
+    "firstName" : "Gholazo",
+    "lastName": "wdawdawd",
+    "email" : "oddly@gmail.com",
+    "tlf" : [ 
+        {
+            "dial_code" : "+58",
+            "phone_number" : "4242611002"
+        }, 
+        {
+
+            "dial_code" : "+57",
+            "phone_number" : "4241640311"
+        }
+    ],
+    "country" : "Country",
+    "State": "State",
+    "City": "City",
+    "address" : [ 
+        {
+
+            "description" : "Mi casa"
+        }, 
+        {
+            "description" : "Mi otra casa"
+        }
+    ]
+}
+RESPONSE = AUN NO TIENE, SERA UN CODIGO
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/:id
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = ARREGLO DE USUARIOS [{
+    "username" : "oddly",
+    "password" : "$2b$10$UGcdIGifrcqIe9NsoSwAZeXK/X9hnA/CGvfhUkVi6/XFSUQU4Chsm",
+    "firstName" : "Gholazo",
+    "lastName": "wdawdawd",
+    "email" : "oddly@gmail.com",
+    "tlf" : [ 
+        {
+            "dial_code" : "+58",
+            "phone_number" : "4242611002"
+        }, 
+        {
+
+            "dial_code" : "+57",
+            "phone_number" : "4241640311"
+        }
+    ],
+    "country" : "Country",
+    "State": "State",
+    "City": "City",
+    "address" : [ 
+        {
+
+            "description" : "Mi casa"
+        }, 
+        {
+            "description" : "Mi otra casa"
+        }
+    ],
+    "token": "wadawdawdawdawdawdawd"
+}]
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/users/:id
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = {
+    "username" : "oddly",
+    "password" : "$2b$10$UGcdIGifrcqIe9NsoSwAZeXK/X9hnA/CGvfhUkVi6/XFSUQU4Chsm",
+    "firstName" : "Gholazo",
+    "lastName": "wdawdawd",
+    "email" : "oddly@gmail.com",
+    "tlf" : [ 
+        {
+            "dial_code" : "+58",
+            "phone_number" : "4242611002"
+        }, 
+        {
+
+            "dial_code" : "+57",
+            "phone_number" : "4241640311"
+        }
+    ],
+    "country" : "Country",
+    "State": "State",
+    "City": "City",
+    "address" : [ 
+        {
+
+            "description" : "Mi casa"
+        }, 
+        {
+            "description" : "Mi otra casa"
+        }
+    ],
+    "token": "wadawdawdawdawdawdawd"
+}
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/countries/dial_codes
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = ARREGLO DE DIAL CODES [{
+        "_id": "5ca2aff83efcdc2d30a3e0e2",
+        "country": "Afghanistan",
+        "dial_code": "93",
+        "__v": 0,
+        "id": "5ca2aff83efcdc2d30a3e0e2"
+}]
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/countries
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = ARREGLO DE PAISES [{
+    {
+        "_id": "5ca1d955ebf5a3332c1dfc3c",
+        "code2": "AD",
+        "code3": "AND",
+        "name": "Andorra",
+        "capital": "Andorra la Vella",
+        "subregion": "Southern Europe",
+        "states": [
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc43",
+                "code": "07",
+                "name": "Andorra la Vella",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc43"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc42",
+                "code": "02",
+                "name": "Canillo",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc42"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc41",
+                "code": "03",
+                "name": "Encamp",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc41"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc40",
+                "code": "08",
+                "name": "Escaldes-Engordany",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc40"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3f",
+                "code": "04",
+                "name": "La Massana",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3f"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3e",
+                "code": "05",
+                "name": "Ordino",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3e"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3d",
+                "code": "06",
+                "name": "Sant Julià de Lòria",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3d"
+            }
+        ],
+        "__v": 0,
+        "id": "5ca1d955ebf5a3332c1dfc3c"
+    },
+}]
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/countries/:id
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = {
+        "_id": "5ca1d955ebf5a3332c1dfc3c",
+        "code2": "AD",
+        "code3": "AND",
+        "name": "Andorra",
+        "capital": "Andorra la Vella",
+        "subregion": "Southern Europe",
+        "states": [
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc43",
+                "code": "07",
+                "name": "Andorra la Vella",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc43"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc42",
+                "code": "02",
+                "name": "Canillo",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc42"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc41",
+                "code": "03",
+                "name": "Encamp",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc41"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc40",
+                "code": "08",
+                "name": "Escaldes-Engordany",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc40"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3f",
+                "code": "04",
+                "name": "La Massana",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3f"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3e",
+                "code": "05",
+                "name": "Ordino",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3e"
+            },
+            {
+                "_id": "5ca1d955ebf5a3332c1dfc3d",
+                "code": "06",
+                "name": "Sant Julià de Lòria",
+                "subdivision": null,
+                "id": "5ca1d955ebf5a3332c1dfc3d"
+            }
+        ],
+        "__v": 0,
+        "id": "5ca1d955ebf5a3332c1dfc3c"
+},
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/countries/:id/states
+REQUEST = GET
+EJEMPLO BODY = NO TIENE
+AUTH = SI
+RESPONSE = {
+    "_id": "5ca1d955ebf5a3332c1dfbd9",
+    "states": [
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbfb",
+            "code": "BDS",
+            "name": "Badakhshān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbfb"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbfa",
+            "code": "BGL",
+            "name": "Baghlān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbfa"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf9",
+            "code": "BAL",
+            "name": "Balkh",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf9"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf8",
+            "code": "BDG",
+            "name": "Bādghīs",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf8"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf7",
+            "code": "BAM",
+            "name": "Bāmyān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf7"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf6",
+            "code": "DAY",
+            "name": "Dāykundī",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf6"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf5",
+            "code": "FRA",
+            "name": "Farāh",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf5"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf4",
+            "code": "FYB",
+            "name": "Fāryāb",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf4"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf3",
+            "code": "GHA",
+            "name": "Ghaznī",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf3"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf2",
+            "code": "GHO",
+            "name": "Ghōr",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf2"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf1",
+            "code": "HEL",
+            "name": "Helmand",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf1"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbf0",
+            "code": "HER",
+            "name": "Herāt",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbf0"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbef",
+            "code": "JOW",
+            "name": "Jowzjān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbef"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbee",
+            "code": "KAN",
+            "name": "Kandahār",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbee"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbed",
+            "code": "KHO",
+            "name": "Khōst",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbed"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbec",
+            "code": "KNR",
+            "name": "Kunar",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbec"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbeb",
+            "code": "KDZ",
+            "name": "Kunduz",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbeb"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbea",
+            "code": "KAB",
+            "name": "Kābul",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbea"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe9",
+            "code": "KAP",
+            "name": "Kāpīsā",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe9"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe8",
+            "code": "LAG",
+            "name": "Laghmān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe8"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe7",
+            "code": "LOG",
+            "name": "Lōgar",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe7"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe6",
+            "code": "NAN",
+            "name": "Nangarhār",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe6"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe5",
+            "code": "NIM",
+            "name": "Nīmrōz",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe5"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe4",
+            "code": "NUR",
+            "name": "Nūristān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe4"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe3",
+            "code": "PIA",
+            "name": "Paktiyā",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe3"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe2",
+            "code": "PKA",
+            "name": "Paktīkā",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe2"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe1",
+            "code": "PAN",
+            "name": "Panjshayr",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe1"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbe0",
+            "code": "PAR",
+            "name": "Parwān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbe0"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbdf",
+            "code": "SAM",
+            "name": "Samangān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbdf"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbde",
+            "code": "SAR",
+            "name": "Sar-e Pul",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbde"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbdd",
+            "code": "TAK",
+            "name": "Takhār",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbdd"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbdc",
+            "code": "URU",
+            "name": "Uruzgān",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbdc"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbdb",
+            "code": "WAR",
+            "name": "Wardak",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbdb"
+        },
+        {
+            "_id": "5ca1d955ebf5a3332c1dfbda",
+            "code": "ZAB",
+            "name": "Zābul",
+            "subdivision": null,
+            "id": "5ca1d955ebf5a3332c1dfbda"
+        }
+    ],
+    "id": "5ca1d955ebf5a3332c1dfbd9"
+}
+
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/events/register
+REQUEST = POST
+EJEMPLO BODY = {
+	"name": "Evento de Prueba",
+	"description": "Descriotorgnernfwen qwniquwbifwbei weirwieb wiebr",
+	"host": "5ca1b9e02979653708efc26e",
+	"guests": [
+        "5ca1c335e8b4950664b94483",
+        "5ca1c67bf87ddb34c072a5a5"
+    ],
+	"country": "United States",
+	"state": "Florida",
+	"city": "Miami",
+	"address":[{
+        "description": "wdawfawfawfaf"
+    }, 
+    {
+        "description":"dawfgagawfawgag"
+    }],
+	"tlf":[{
+        "dial_code": "+654","phone_number":"123211"
+    },
+    {
+        "dial_code": "+65","phone_number":"2312313"
+    }],
+	"category":"Tecnologia",
+	"type": "Presencial",
+	"restriction": "Publico",
+	"start_date": "12/12/2019",
+	"finish_date": "01/01/2020"
+}
+AUTH = SI
+RESPONSE = SE ENVIARA UN CODES
+
+################################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/events/:id
+REQUEST = GET
+RESPONSE = EVENTO {
+    "guests": [
+        {
+            "_id": "5ca1c335e8b4950664b94483",
+            "username": "albrewot",
+            "password": "$2b$10$t0J3qY9QHQVe6ayHyLNymuMWktlsKiCT0PWwyC2grlUc.Ia93sNSC",
+            "firstName": "Gholazo",
+            "email": "albrewot@gmail.com",
+            "tlf": [],
+            "address": [],
+            "createdDate": "2019-04-01T07:52:21.051Z",
+            "__v": 0,
+            "id": "5ca1c335e8b4950664b94483"
+        },
+        {
+            "_id": "5ca1c67bf87ddb34c072a5a5",
+            "username": "ghol",
+            "password": "$2b$10$rotMXsSLugUJw7xyGl8K9OJhfmbejzE4MUUCDF97duk0LRImUgH1a",
+            "firstName": "Gholazo",
+            "email": "ghol@gmail.com",
+            "tlf": [
+                {
+                    "_id": "5ca1c67bf87ddb34c072a5a7",
+                    "dial_code": "+58",
+                    "phone_number": "4242611002",
+                    "id": "5ca1c67bf87ddb34c072a5a7"
+                },
+                {
+                    "_id": "5ca1c67bf87ddb34c072a5a6",
+                    "dial_code": "+57",
+                    "phone_number": "4241640311",
+                    "id": "5ca1c67bf87ddb34c072a5a6"
+                }
+            ],
+            "address": [
+                {
+                    "_id": "5ca1c67bf87ddb34c072a5a9",
+                    "description": "Mi casa",
+                    "id": "5ca1c67bf87ddb34c072a5a9"
+                },
+                {
+                    "_id": "5ca1c67bf87ddb34c072a5a8",
+                    "description": "Mi otra casa",
+                    "id": "5ca1c67bf87ddb34c072a5a8"
+                }
+            ],
+            "createdDate": "2019-04-01T08:06:19.437Z",
+            "__v": 0,
+            "id": "5ca1c67bf87ddb34c072a5a5"
+        }
+    ],
+    "_id": "5ca1f06261cfba1cd43811b1",
+    "name": "Evento de Prueba",
+    "description": "Descriotorgnernfwen qwniquwbifwbei weirwieb wiebr",
+    "host": {
+        "_id": "5ca1b9e02979653708efc26e",
+        "username": "oddly",
+        "password": "$2b$10$UGcdIGifrcqIe9NsoSwAZeXK/X9hnA/CGvfhUkVi6/XFSUQU4Chsm",
+        "firstName": "Gholazo",
+        "email": "oddly@gmail.com",
+        "tlf": [
+            {
+                "_id": "5ca1b9e02979653708efc270",
+                "dial_code": "+58",
+                "phone_number": "4242611002",
+                "id": "5ca1b9e02979653708efc270"
+            },
+            {
+                "_id": "5ca1b9e02979653708efc26f",
+                "dial_code": "+57",
+                "phone_number": "4241640311",
+                "id": "5ca1b9e02979653708efc26f"
+            }
+        ],
+        "address": [
+            {
+                "_id": "5ca1b9e02979653708efc272",
+                "description": "Mi casa",
+                "id": "5ca1b9e02979653708efc272"
+            },
+            {
+                "_id": "5ca1b9e02979653708efc271",
+                "description": "Mi otra casa",
+                "id": "5ca1b9e02979653708efc271"
+            }
+        ],
+        "createdDate": "2019-04-01T07:12:32.308Z",
+        "__v": 0,
+        "id": "5ca1b9e02979653708efc26e"
+    },
+    "country": "United States",
+    "state": "Florida",
+    "city": "Miami",
+    "address": [
+        {
+            "_id": "5ca1f06261cfba1cd43811b3",
+            "description": "wdawfawfawfaf",
+            "id": "5ca1f06261cfba1cd43811b3"
+        },
+        {
+            "_id": "5ca1f06261cfba1cd43811b2",
+            "description": "dawfgagawfawgag",
+            "id": "5ca1f06261cfba1cd43811b2"
+        }
+    ],
+    "tlf": [
+        {
+            "_id": "5ca1f06261cfba1cd43811b5",
+            "dial_code": "+654",
+            "phone_number": "123211",
+            "id": "5ca1f06261cfba1cd43811b5"
+        },
+        {
+            "_id": "5ca1f06261cfba1cd43811b4",
+            "dial_code": "+65",
+            "phone_number": "2312313",
+            "id": "5ca1f06261cfba1cd43811b4"
+        }
+    ],
+    "category": "Tecnologia",
+    "type": "Presencial",
+    "restriction": "Publico",
+    "start_date": "2019-12-12T04:00:00.000Z",
+    "finish_date": "2020-01-01T04:00:00.000Z",
+    "__v": 0,
+    "id": "5ca1f06261cfba1cd43811b1"
+}
+

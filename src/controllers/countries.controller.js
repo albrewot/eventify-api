@@ -4,10 +4,10 @@ const countryService = require("../services/country.service");
 
 // Rutas para usuario
 router.get("/", getAllCountries);
+router.get("/dial_codes", getAllDialCodes);
 router.get("/:id", getCountryById);
 router.post("/create_all", createAllCountries);
 router.get("/:id/states", getCountryStates);
-router.get("/dial_codes", getAllDialCodes);
 router.post("/dial_codes/create_all", registerDialCodes);
 
 module.exports = router;
@@ -54,5 +54,8 @@ function getAllDialCodes(req, res, next) {
   countryService
     .getAllDialCodes()
     .then(dialcodes => res.json(dialcodes))
-    .catch(err => next(err));
+    .catch(err => {
+      console.log(err);
+      next(err);
+    });
 }
