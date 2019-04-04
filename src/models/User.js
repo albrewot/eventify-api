@@ -39,7 +39,11 @@ const UserSchema = new Schema({
     required: [true, "missing city"]
   },
   address: [Address],
-  createdDate: {
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastUpdate: {
     type: Date,
     default: Date.now
   }

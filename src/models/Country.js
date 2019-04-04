@@ -9,7 +9,15 @@ const CountrySchema = new Schema({
   name: String,
   capital: String,
   subregion: String,
-  states: [State]
+  states: [State],
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastUpdate: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 CountrySchema.set("toJSON", { virtuals: true });

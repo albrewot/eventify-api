@@ -1,4 +1,4 @@
-const db = require("../helpers/db");
+const db = require("../config/db");
 const DialCode = db.DialCode;
 const Country = db.Country;
 

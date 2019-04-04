@@ -2,13 +2,15 @@ const express = require("express");
 const router = express.Router();
 const countryService = require("../services/country.service");
 
+const { isAuth } = require("../middlewares/auth.middleware");
+
 // Rutas para usuario
-router.get("/", getAllCountries);
-router.get("/dial_codes", getAllDialCodes);
-router.get("/:id", getCountryById);
-router.post("/create_all", createAllCountries);
-router.get("/:id/states", getCountryStates);
-router.post("/dial_codes/create_all", registerDialCodes);
+router.get("/", isAuth, getAllCountries);
+router.get("/dial_codes", isAuth, getAllDialCodes);
+router.get("/:id", isAuth, getCountryById);
+router.post("/create_all", isAuth, createAllCountries);
+router.get("/:id/states", isAuth, getCountryStates);
+router.post("/dial_codes/create_all", isAuth, registerDialCodes);
 
 module.exports = router;
 

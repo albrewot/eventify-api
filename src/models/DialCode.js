@@ -8,6 +8,14 @@ const DialCodeSchema = new Schema({
   },
   dial_code: {
     type: String
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  lastUpdate: {
+    type: Date,
+    default: Date.now
   }
 });
 

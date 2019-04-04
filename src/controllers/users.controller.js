@@ -2,28 +2,17 @@ const express = require("express");
 const router = express.Router();
 const userService = require("../services/user.service");
 
+const { isAuth } = require("../middlewares/auth.middleware");
+
 // Rutas para usuario
-router.post("/login", authenticate);
 router.post("/register", register);
-router.get("/", getAll);
-router.get("/current", getCurrent);
-router.get("/:id", getById);
-router.put("/:id", update);
-router.delete("/:id", _delete);
+router.get("/", isAuth, getAll);
+router.get("/current", isAuth, getCurrent);
+router.get("/:id", isAuth, getById);
+router.put("/:id", isAuth, update);
+router.delete("/:id", isAuth, _delete);
 
 module.exports = router;
-
-function authenticate(req, res, next) {
-  console.log("LOGIN |", req.body);
-  userService
-    .authenticate(req.body)
-    .then(user =>
-      user
-        ? res.json(user)
-        : res.status(400).json({ message: "Username or password is incorrect" })
-    )
-    .catch(err => next(err));
-}
 
 function register(req, res, next) {
   userService
@@ -44,7 +33,7 @@ function getAll(req, res, next) {
 
 function getCurrent(req, res, next) {
   userService
-    .getById(req.user.sub)
+    .getById(req.user.id)
     .then(user => (user ? res.json(user) : res.sendStatus(404)))
     .catch(err => next(err));
 }
