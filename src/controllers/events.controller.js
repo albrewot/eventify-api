@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const eventService = require("../services/event.service");
 
+const { isAuth } = require("../middlewares/auth.middleware");
+
 // Rutas para usuario
-router.post("/register", register);
-router.get("/:id", getEventById);
+router.post("/register", isAuth, register);
+router.get("/:id", isAuth, getEventById);
 
 module.exports = router;
 

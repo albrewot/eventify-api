@@ -1,30 +1,8 @@
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const db = require("../helpers/db");
+const db = require("../config/db");
 const User = db.User;
 
 class UserService {
-  //Login y devuelve objeto de usuario sin el hash del password
-  async authenticate({ username, password }) {
-    console.log("LOGIN SERVICE |", username, password);
-    const user = await User.findOne({ username });
-    console.log("USER |", user);
-    if (!user) {
-      return;
-    }
-    const compare = await bcrypt.compare(password, user.password);
-    console.log("COMPARE |", compare);
-    if (user && compare) {
-      const { password, ...userWithoutHash } = user.toObject();
-      console.log("user hash", userWithoutHash);
-      const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET);
-      return {
-        ...userWithoutHash,
-        token
-      };
-    }
-  }
-
   //se trae a todos los usuarios de la collecion, sin hash
   async getAll() {
     return await User.find().select("-password");
@@ -37,20 +15,28 @@ class UserService {
 
   //crea un usuario
   async create(userParam) {
-    console.log(userParam);
-    // validate
-    if (await User.findOne({ username: userParam.username })) {
-      throw `the username: ${userParam.username} is already taken`;
-    }
+    const { username, password } = userParam;
+    if (!username || !password || name) {
+      throw `Missing username and/or password`;
+    } else {
+      if (await User.findOne({ username })) {
+        throw `the username ${username} is already taken`;
+      }
 
-    const user = new User(userParam);
+      const user = new User(userParam);
 
-    if (userParam.password) {
-      const hash = await bcrypt.hash(userParam.password, 10);
+      const hash = await bcrypt.hash(password, 10);
+
       user.password = hash;
-    }
 
-    await user.save();
+      const newUser = await User.create(user);
+
+      if (newUser) {
+        return newUser;
+      } else {
+        throw `Error while creating the user`;
+      }
+    }
   }
 
   async update(id, userParam) {

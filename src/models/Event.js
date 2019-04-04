@@ -7,7 +7,8 @@ const Phone = require("./Phone");
 const EventSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   description: {
     type: String,
@@ -58,9 +59,13 @@ const EventSchema = new Schema({
     type: Date,
     required: true
   },
-  createdDate: {
+  createdAt: {
     type: Date,
     efault: Date.now
+  },
+  lastUpdate: {
+    type: Date,
+    default: Date.now
   }
 });
 
