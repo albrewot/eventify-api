@@ -14,9 +14,8 @@ const UserSchema = new Schema({
     type: String,
     required: [true, "missing password"]
   },
-  firstName: {
-    type: String,
-    required: [true, "missing first name"]
+  name: {
+    type: String
   },
   lastName: {
     type: String
@@ -27,16 +26,13 @@ const UserSchema = new Schema({
   },
   tlf: [Phone],
   country: {
-    type: String,
-    required: [true, "missing country"]
+    type: String
   },
   state: {
-    type: String,
-    required: [true, "missing state"]
+    type: String
   },
   city: {
-    type: String,
-    required: [true, "missing city"]
+    type: String
   },
   address: [Address],
   createdAt: {
