@@ -5,6 +5,7 @@ const ReferenceService = require("../services/reference.service");
 const { isAuth } = require("../middlewares/auth.middleware");
 
 router.get("/", isAuth, getReferences);
+router.get("/category", isAuth, getParents);
 router.get("/category/:id", isAuth, getReferenceByParent);
 router.post("/register_all", isAuth, registerReferences);
 
@@ -22,6 +23,15 @@ async function getReferences(req, res, next) {
 async function getReferenceByParent(req, res, next) {
   try {
     const references = await ReferenceService.getReferencesByParent(req.params);
+    res.status(200).send({ message: "references found", data: references });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getParents(req, res, next) {
+  try {
+    const references = await ReferenceService.getParents();
     res.status(200).send({ message: "references found", data: references });
   } catch (err) {
     next(err);

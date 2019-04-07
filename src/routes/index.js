@@ -8,6 +8,7 @@ const referenceController = require("../controllers/references.controller");
 
 module.exports = app => {
   app.get("/", (req, res) => {
+    console.log(req);
     res.send({ message: "Root route" });
   });
 
