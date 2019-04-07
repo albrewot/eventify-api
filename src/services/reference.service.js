@@ -43,8 +43,20 @@ class ReferenceService {
       const references = await Reference.find({ parent: id }).populate(
         "parent"
       );
-      if (!references || references.ength <= 0) {
+      if (!references || references.length <= 0) {
         throw "No reference found";
+      }
+      return references;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getParents() {
+    try {
+      const references = await Reference.find({ parent: null });
+      if (!references || references.length <= 0) {
+        throw "No references found";
       }
       return references;
     } catch (err) {

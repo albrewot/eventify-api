@@ -51,6 +51,10 @@ const EventSchema = new Schema({
     type: String,
     required: [true, "missing restriction"]
   },
+  modality: {
+    type: String,
+    required: [true, "missing modality"]
+  },
   start_date: {
     type: Date,
     required: true

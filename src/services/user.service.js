@@ -15,12 +15,15 @@ class UserService {
 
   //crea un usuario
   async create(userParam) {
-    const { username, password } = userParam;
-    if (!username || !password || name) {
-      throw `Missing username and/or password`;
+    const { username, password, email } = userParam;
+    if (!username || !password || !email) {
+      throw `Missing one or more of the following: username, email, password`;
     } else {
       if (await User.findOne({ username })) {
         throw `the username ${username} is already taken`;
+      }
+      if (await User.findOne({ email })) {
+        throw `the email ${email} is already taken`;
       }
 
       const user = new User(userParam);
