@@ -15,30 +15,49 @@ class UserService {
 
   //crea un usuario
   async create(userParam) {
-    const { username, password, email } = userParam;
-    if (!username || !password || !email) {
-      throw `Missing one or more of the following: username, email, password`;
-    } else {
-      if (await User.findOne({ username })) {
-        throw `the username ${username} is already taken`;
-      }
-      if (await User.findOne({ email })) {
-        throw `the email ${email} is already taken`;
-      }
-
-      const user = new User(userParam);
-
-      const hash = await bcrypt.hash(password, 10);
-
-      user.password = hash;
-
-      const newUser = await User.create(user);
-
-      if (newUser) {
-        return newUser;
+    try {
+      const { username, password, email, name } = userParam;
+      if (!username || !password || !email || !name) {
+        throw {
+          type: "missing",
+          message: `Missing one or more of the following: username, email, password, name`,
+          code: 201
+        };
       } else {
-        throw `Error while creating the user`;
+        if (await User.findOne({ username })) {
+          throw {
+            type: "taken",
+            message: `the username ${username} is already taken`,
+            code: 202
+          };
+        }
+        if (await User.findOne({ email })) {
+          throw {
+            type: "taken",
+            message: `the email ${email} is already taken`,
+            code: 203
+          };
+        }
+
+        const user = new User(userParam);
+
+        const hash = await bcrypt.hash(password, 10);
+
+        user.password = hash;
+
+        const newUser = await User.create(user);
+        if (newUser) {
+          return newUser;
+        } else {
+          throw {
+            type: "failed",
+            message: `Error while creating the user`,
+            code: 204
+          };
+        }
       }
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -46,12 +65,16 @@ class UserService {
     const user = await User.findById(id);
 
     //Valida si el usuario existe o ya esta usado
-    if (!user) throw "User not found";
+    if (!user) throw { type: "not found", message: "User not found", code: 14 };
     if (
       user.username !== userParam.username &&
       (await User.findOne({ username: userParam.username }))
     ) {
-      throw 'Username "' + userParam.username + '" is already taken';
+      throw {
+        type: "taken",
+        message: 'Username "' + userParam.username + '" is already taken',
+        code: 202
+      };
     }
 
     //si se ingreso password, la hashea

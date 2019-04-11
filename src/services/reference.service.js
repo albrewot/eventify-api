@@ -6,7 +6,11 @@ class ReferenceService {
     try {
       for (let ref of referenceParam) {
         if (await Reference.findOne({ name: ref.name })) {
-          throw `Reference [${ref.name}] already exists`;
+          throw {
+            type: "taken",
+            message: `Reference [${ref.name}] already exists`,
+            code: 209
+          };
         }
       }
 
@@ -25,7 +29,11 @@ class ReferenceService {
       console.log("reference");
       if (!references || references.length <= 0) {
         console.log("reference err");
-        throw `There is no references to retrieve`;
+        throw {
+          type: "not found",
+          message: `There is no references to retrieve`,
+          code: 210
+        };
       }
       console.log("reference in");
       return references;
@@ -37,14 +45,14 @@ class ReferenceService {
   async getReferencesByParent(referenceParams) {
     const { id } = referenceParams;
     if (!id) {
-      throw `No id supplied`;
+      throw { type: "missing", message: `No id supplied`, code: 211 };
     }
     try {
       const references = await Reference.find({ parent: id }).populate(
         "parent"
       );
       if (!references || references.length <= 0) {
-        throw "No reference found";
+        throw { type: "not found", message: "No reference found", code: 212 };
       }
       return references;
     } catch (err) {
@@ -56,7 +64,7 @@ class ReferenceService {
     try {
       const references = await Reference.find({ parent: null });
       if (!references || references.length <= 0) {
-        throw "No references found";
+        throw { type: "not found", message: "No reference found", code: 212 };
       }
       return references;
     } catch (err) {

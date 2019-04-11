@@ -10,19 +10,26 @@ router.get("/:id", isAuth, getEventById);
 
 module.exports = router;
 
-function register(req, res, next) {
-  eventService
-    .create(req.body)
-    .then(() => res.json({}))
-    .catch(err => {
-      console.log(err);
-      next(err);
-    });
+async function register(req, res, next) {
+  try {
+    const event = await eventService.create(req.body);
+    res.json({ message: "event created successfully", data: event, code: 105 });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function getEventById(req, res, next) {
-  eventService
-    .getEventById(req.params.id)
-    .then(event => (event ? res.json(event) : res.sendStatus(404)))
-    .catch(err => next(err));
+async function getEventById(req, res, next) {
+  try {
+    const event = await eventService.getEventById(req.params.id);
+    event
+      ? res.json({
+          message: "event retrieved successfully",
+          data: event,
+          code: 106
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
 }

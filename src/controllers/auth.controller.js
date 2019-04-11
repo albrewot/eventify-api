@@ -11,40 +11,25 @@ router.post("/login", login);
 router.get("/logout", isAuth, logout);
 
 function login(req, res, next) {
-  // passport.authenticate("local", { session: false }, (err, user, info) => {
-  //   console.log("error: ", err);
-  //   console.log(info);
-  //   console.log("con", user);
-  //   if (info !== undefined) {
-  //     next(info);
-  //   } else {
-  //     req.login(user, err => {
-  //       if (err) {
-  //         console.log(err);
-  //         return res.status(401).json(err);
-  //       } else {
-  //         return res.status(203).json(user);
-  //       }
-  //     });
-  //   }
-  // })(req, res, next);
   passport.authenticate("local", { session: false }, (err, user, info) => {
     console.log(err);
     if (err || !user) {
-      return res.status(400).json({
+      return res.json({
+        type: "failed",
         message: info ? info.message : "Login failed",
-        user: user
+        user: user,
+        code: info.message === "Missing credentials" ? 6 : info.code
       });
     }
 
     req.login(user, { session: false }, err => {
       if (err) {
-        res.send(err);
+        next(err);
       }
 
       const token = jwt.sign(user, process.env.JWT_SECRET);
 
-      return res.json({ user, token });
+      return res.json({ type: "success", user, token, code: 101 });
     });
   })(req, res, next);
 }
@@ -52,7 +37,7 @@ function login(req, res, next) {
 // Logout
 function logout(req, res) {
   req.logout();
-  res.json({ message: "logout" });
+  res.json({ message: "logout", code: 102 });
 }
 
 module.exports = router;

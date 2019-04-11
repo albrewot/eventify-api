@@ -8,56 +8,94 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.get("/", isAuth, getAllCountries);
 router.get("/dial_codes", isAuth, getAllDialCodes);
 router.get("/:id", isAuth, getCountryById);
-router.post("/create_all", isAuth, createAllCountries);
+router.post("/create", isAuth, createCountries);
 router.get("/:id/states", isAuth, getCountryStates);
 router.post("/dial_codes/create_all", isAuth, registerDialCodes);
 
 module.exports = router;
 
-function createAllCountries(req, res, next) {
-  countryService
-    .createAllCountries(req.body)
-    .then(() => res.json({}))
-    .catch(err => next(err));
-}
-
-function getAllCountries(req, res, next) {
-  countryService
-    .getAllCountries()
-    .then(countries => res.json(countries))
-    .catch(err => next(err));
-}
-
-function getCountryById(req, res, next) {
-  countryService
-    .getCountryById(req.params.id)
-    .then(country => (country ? res.json(country) : res.sendStatus(404)))
-    .catch(err => next(err));
-}
-
-function getCountryStates(req, res, next) {
-  countryService
-    .getCountryStates(req.params.id)
-    .then(states => (states ? res.json(states) : res.sendStatus(404)))
-    .catch(err => next(err));
-}
-
-function registerDialCodes(req, res, next) {
-  countryService
-    .createDialCode(req.body)
-    .then(() => res.json({}))
-    .catch(err => {
-      console.log(err);
-      next(err);
+async function createCountries(req, res, next) {
+  try {
+    const countries = await countryService.createCountries(req.body);
+    res.json({
+      message: "countries saved successfully",
+      data: countries,
+      code: 107
     });
+  } catch (err) {
+    next(err);
+  }
 }
 
-function getAllDialCodes(req, res, next) {
-  countryService
-    .getAllDialCodes()
-    .then(dialcodes => res.json(dialcodes))
-    .catch(err => {
-      console.log(err);
-      next(err);
+async function getAllCountries(req, res, next) {
+  try {
+    const countries = await countryService.getAllCountries();
+    countries
+      ? res.json({
+          message: "countries retrieved succesffuly",
+          data: countries,
+          code: 108
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getCountryById(req, res, next) {
+  try {
+    const country = await countryService.getCountryById(req.params.id);
+    country
+      ? res.json({
+          message: "country retrieved successfully",
+          data: country,
+          code: 108
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getCountryStates(req, res, next) {
+  try {
+    const states = await countryService.getCountryStates(req.params.id);
+    states
+      ? res.json({
+          message: "states retrieved successfilly",
+          data: states,
+          code: 109
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function registerDialCodes(req, res, next) {
+  try {
+    const dialcodes = await countryService.createDialCode(req.body);
+    res.json({
+      message: "dial code(s) registered successfully",
+      data: dialcodess,
+      code: 110
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getAllDialCodes(req, res, next) {
+  try {
+    const dialcodes = await countryService.getAllDialCodes();
+    dialcodes
+      ? res.json({
+          message: "dial codes retrieved successfully",
+          data: dialcodes,
+          code: 111
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
 }

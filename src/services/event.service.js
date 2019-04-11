@@ -5,7 +5,11 @@ class EventService {
   async create(eventParam) {
     console.log(eventParam);
     if (await Event.findOne({ name: eventParam.name })) {
-      throw "Evento ya existe";
+      throw {
+        type: "taken",
+        message: "There is already an event with that name",
+        code: 206
+      };
     }
 
     const event = new Event(eventParam);
