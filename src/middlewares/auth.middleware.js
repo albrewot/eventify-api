@@ -10,7 +10,7 @@ let isAuth = (req, res, next) => {
       jwt.verify(bearerToken, process.env.JWT_SECRET, (err, authData) => {
         if (err) {
           console.log(err);
-          return res.status(403).send({ message: "Unauthenticated" });
+          return res.status(403).send({ message: "Unauthenticated", code: 2 });
         } else {
           console.log(authData);
           return next();
@@ -19,7 +19,7 @@ let isAuth = (req, res, next) => {
     }
   } else {
     console.log("no hay bearer");
-    res.status(403).send({ message: "Unauthenticated" });
+    res.status(403).send({ message: "Unauthenticated", code: 2 });
   }
 };
 

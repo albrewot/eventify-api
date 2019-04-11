@@ -15,7 +15,8 @@ const UserSchema = new Schema({
     required: [true, "missing password"]
   },
   name: {
-    type: String
+    type: String,
+    required: [true, "missing name"]
   },
   lastName: {
     type: String

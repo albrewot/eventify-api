@@ -734,3 +734,279 @@ RESPONSE = EVENTO {
     "id": "5ca1f06261cfba1cd43811b1"
 }
 
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/references/
+REQUEST = GET
+AUTH = SI
+EJEMPLO BODY = NO TIENE
+RESPONSE = {
+    "message": "references retrieved successfully",
+    "data": [
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459ba",
+            "name": "Categoria",
+            "createdAt": "2019-04-04T18:26:39.617Z",
+            "lastUpdate": "2019-04-04T18:26:39.617Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459ba"
+        },
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459bb",
+            "name": "Tipo",
+            "createdAt": "2019-04-04T18:26:39.618Z",
+            "lastUpdate": "2019-04-04T18:26:39.618Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459bb"
+        },
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459bc",
+            "name": "restriccion",
+            "createdAt": "2019-04-04T18:26:39.620Z",
+            "lastUpdate": "2019-04-04T18:26:39.620Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459bc"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459ba",
+            "_id": "5ca65a914b700c2e2c6384f6",
+            "name": "Tecnología",
+            "createdAt": "2019-04-04T19:27:13.901Z",
+            "lastUpdate": "2019-04-04T19:27:13.901Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384f6"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459ba",
+            "_id": "5ca65a914b700c2e2c6384f7",
+            "name": "Música",
+            "createdAt": "2019-04-04T19:27:13.903Z",
+            "lastUpdate": "2019-04-04T19:27:13.903Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384f7"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459ba",
+            "_id": "5ca65a914b700c2e2c6384f8",
+            "name": "Arte",
+            "createdAt": "2019-04-04T19:27:13.903Z",
+            "lastUpdate": "2019-04-04T19:27:13.903Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384f8"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459bb",
+            "_id": "5ca65a914b700c2e2c6384f9",
+            "name": "Presencial",
+            "createdAt": "2019-04-04T19:27:13.903Z",
+            "lastUpdate": "2019-04-04T19:27:13.903Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384f9"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459bb",
+            "_id": "5ca65a914b700c2e2c6384fa",
+            "name": "Online",
+            "createdAt": "2019-04-04T19:27:13.904Z",
+            "lastUpdate": "2019-04-04T19:27:13.904Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384fa"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459bc",
+            "_id": "5ca65a914b700c2e2c6384fb",
+            "name": "Privado",
+            "createdAt": "2019-04-04T19:27:13.904Z",
+            "lastUpdate": "2019-04-04T19:27:13.904Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384fb"
+        },
+        {
+            "parent": "5ca64c5f752c9224e05459bc",
+            "_id": "5ca65a914b700c2e2c6384fc",
+            "name": "Público",
+            "createdAt": "2019-04-04T19:27:13.904Z",
+            "lastUpdate": "2019-04-04T19:27:13.904Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384fc"
+        }
+    ],
+    "code": 112
+}
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/references/rgister_all
+REQUEST = POST
+AUTH = SI
+BODY = [
+    {
+		"name": "Categoria",
+		"parent": null
+	},
+	{
+		"name": "Tipo",
+		"parent": null
+	},
+	{
+		"name": "Restricción",
+		"parent": null
+	},
+	{
+		"name": "Modalidad",
+		"parent": null
+	},
+    {
+		"name": "Tecnología",
+		"parent": "5ca946d6f2122e1808d62ddb"
+	},
+	{
+		"name": "Música",
+		"parent": "5ca946d6f2122e1808d62ddb"
+	},
+	{
+		"name": "Arte",
+		"parent": "5ca946d6f2122e1808d62ddb"
+	},
+	{
+		"name": "Presencial",
+		"parent": "5ca946d6f2122e1808d62dde"
+	},
+	{
+		"name": "Online",
+		"parent": "5ca946d6f2122e1808d62dde"
+	},
+	{
+		"name": "Privado",
+		"parent": "5ca946d6f2122e1808d62ddd"
+	},
+	{
+		"name": "Público",
+		"parent": "5ca946d6f2122e1808d62ddd"
+	},
+	{
+		"name": "Obra de Teatro",
+		"parent":"5ca946d6f2122e1808d62ddc"
+	},
+	{
+		"name": "Concierto",
+		"parent": "5ca946d6f2122e1808d62ddc"
+	},
+	{
+		"name": "Presentación",
+		"parent": "5ca946d6f2122e1808d62ddc"
+	}
+]
+RESPONSE = {
+    "message": "References stored successfully",
+    "data": [
+        {
+            "parent": null,
+            "_id": "5caf9643da5e66242c44a98e",
+            "name": "Test",
+            "createdAt": "2019-04-11T19:32:19.619Z",
+            "lastUpdate": "2019-04-11T19:32:19.619Z",
+            "__v": 0,
+            "id": "5caf9643da5e66242c44a98e"
+        }
+    ],
+    "code": 114
+}
+
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/references/category
+REQUEST = GET
+AUTH = SI
+BODY = NO TIENE
+RESPONSE = {
+    "message": "references found",
+    "data": [
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459ba",
+            "name": "Categoria",
+            "createdAt": "2019-04-04T18:26:39.617Z",
+            "lastUpdate": "2019-04-04T18:26:39.617Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459ba"
+        },
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459bb",
+            "name": "Tipo",
+            "createdAt": "2019-04-04T18:26:39.618Z",
+            "lastUpdate": "2019-04-04T18:26:39.618Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459bb"
+        },
+        {
+            "parent": null,
+            "_id": "5ca64c5f752c9224e05459bc",
+            "name": "restriccion",
+            "createdAt": "2019-04-04T18:26:39.620Z",
+            "lastUpdate": "2019-04-04T18:26:39.620Z",
+            "__v": 0,
+            "id": "5ca64c5f752c9224e05459bc"
+        },
+        {
+            "parent": null,
+            "_id": "5caf9643da5e66242c44a98e",
+            "name": "Test",
+            "createdAt": "2019-04-11T19:32:19.619Z",
+            "lastUpdate": "2019-04-11T19:32:19.619Z",
+            "__v": 0,
+            "id": "5caf9643da5e66242c44a98e"
+        }
+    ],
+    "code": 113
+}
+##############################################################################
+
+ENDPOINT = https://iujo-eventify-api.herokuapp.com/api/references/categor/:id
+REQUEST = GET
+AUTH = SI
+BODY = NO TIENE
+RESPONSE = {
+    "message": "references found",
+    "data": [
+        {
+            "parent": {
+                "parent": null,
+                "_id": "5ca64c5f752c9224e05459bc",
+                "name": "restriccion",
+                "createdAt": "2019-04-04T18:26:39.620Z",
+                "lastUpdate": "2019-04-04T18:26:39.620Z",
+                "__v": 0,
+                "id": "5ca64c5f752c9224e05459bc"
+            },
+            "_id": "5ca65a914b700c2e2c6384fb",
+            "name": "Privado",
+            "createdAt": "2019-04-04T19:27:13.904Z",
+            "lastUpdate": "2019-04-04T19:27:13.904Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384fb"
+        },
+        {
+            "parent": {
+                "parent": null,
+                "_id": "5ca64c5f752c9224e05459bc",
+                "name": "restriccion",
+                "createdAt": "2019-04-04T18:26:39.620Z",
+                "lastUpdate": "2019-04-04T18:26:39.620Z",
+                "__v": 0,
+                "id": "5ca64c5f752c9224e05459bc"
+            },
+            "_id": "5ca65a914b700c2e2c6384fc",
+            "name": "Público",
+            "createdAt": "2019-04-04T19:27:13.904Z",
+            "lastUpdate": "2019-04-04T19:27:13.904Z",
+            "__v": 0,
+            "id": "5ca65a914b700c2e2c6384fc"
+        }
+    ],
+    "code": 113
+}

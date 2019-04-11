@@ -1,0 +1,42 @@
+Error Codes:
+
+2 - Unauthenticated
+3 - Validation Error (Mongo)
+4 - Internal Server Error
+5 - Login failed
+6 - Missing Credentials
+404 - Endpoint doesn't exist
+
+
+Successful request codes:
+
+101 - Login Success
+102 - Logout Success (No se esta utilizando este pero porsia)
+103 - User Created Successfully
+104 - User retrieved Successfully
+105 - Event created Successfully,
+106 - Event retrieved Successfully,
+107 - Country created Successfully,
+108 - Countries retrieved Successfully,
+109 - States retrieved successfully,
+110 - Dials codes created successfully,
+111 - Dials codes retrieved successfully,
+112 - References retrieved successfully,
+113 - Reference found,
+114 - References created successfully,
+
+Validation Codes: 
+
+201 - Missing one or more of the following: username, email, password, name
+202 - Username taken,
+203 - Email taken,
+204 - User not found,
+205 - Incorrect password,
+206 - Event name is not available,
+207 - Error while creating country
+208 - Error while creating dial code,
+209 - Reference already exist,
+210 - There is no referene to retrieve,
+211 - No reference id supplied,
+212 - Reference not found
+

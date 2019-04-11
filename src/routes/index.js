@@ -24,6 +24,6 @@ module.exports = app => {
   app.use((req, res) => {
     res
       .status(404)
-      .send({ message: `Error 404 - Route [${req.url}] not found` });
+      .send({ message: `Error 404 - Route [${req.url}] not found`, code: 404 });
   });
 };
