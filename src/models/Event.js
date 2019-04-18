@@ -11,8 +11,8 @@ const EventSchema = new Schema({
     unique: true
   },
   description: {
-    type: String,
-    required: true
+    type: String
+    //required: true
   },
   host: {
     type: mongoose.Schema.Types.ObjectId,
