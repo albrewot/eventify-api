@@ -11,7 +11,8 @@ const EventSchema = new Schema({
     unique: true
   },
   description: {
-    type: String
+    type: String,
+    default: null
     //required: true
   },
   host: {
@@ -26,15 +27,18 @@ const EventSchema = new Schema({
     }
   ],
   country: {
-    type: String
+    type: String,
+    default: null
     //required: [true, "missing country"]
   },
   state: {
-    type: String
+    type: String,
+    default: null
     //required: [true, "missing state"]
   },
   city: {
-    type: String
+    type: String,
+    default: null
     //required: [true, "missing city"]
   },
   address: [Address],

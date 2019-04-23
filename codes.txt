@@ -24,6 +24,7 @@ Successful request codes:
 112 - References retrieved successfully,
 113 - Reference found,
 114 - References created successfully,
+115 - Users Event retrieved successfully
 
 Validation Codes: 
 

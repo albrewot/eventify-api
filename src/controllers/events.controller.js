@@ -7,6 +7,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 // Rutas para usuario
 router.post("/register", isAuth, register);
 router.get("/:id", isAuth, getEventById);
+router.get("/user/:id", isAuth, getUserEvents);
 
 module.exports = router;
 
@@ -30,6 +31,20 @@ async function getEventById(req, res, next) {
         })
       : res.sendStatus(404);
   } catch (err) {
+    next(err);
+  }
+}
+
+async function getUserEvents(req, res, next){
+  try{
+    const events = await eventService.getUserEvents(req.params.id);
+    events ? res.json({
+      message: "user's event retrieved successfully",
+      data: events,
+      code: 115
+    })
+    : res.sendStatus(404);
+  } catch(err){
     next(err);
   }
 }

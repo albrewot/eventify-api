@@ -14,7 +14,7 @@ function login(req, res, next) {
   passport.authenticate("local", { session: false }, (err, user, info) => {
     console.log(err);
     if (err || !user) {
-      return res.json({
+      return res.status(400).json({
         type: "failed",
         message: info ? info.message : "Login failed",
         user: user,
