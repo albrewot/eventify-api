@@ -11,14 +11,16 @@ const User = db.User;
 
 module.exports = passport => {
   passport.use(
-    new LocalStrategy(async (email, password, done) => {
+    new LocalStrategy(async (username, password, done) => {
       console.log("1 local strategy");
 
-      let user = await User.findOne({ email });
-
+      let user = await User.findOne({ username });
+      if(!user){
+        user = await User.findOne({email:username});
+      }
       if (!user) {
         done(null, false, {
-          message: `User [${email}] not found`,
+          message: `User [${username}] not found`,
           code: 204
         });
       }

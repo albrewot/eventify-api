@@ -89,6 +89,21 @@ class UserService {
     await user.save();
   }
 
+  async changeAvatar(id, image){
+    const user = await User.findById(id);
+    console.log("found", user);
+    if(!user) throw { type: "not found", message: "User not found", code: 14 };
+    
+    if(image){
+      Object.assign(user, {avatar: `${process.env.HOSTNAME_HANDLER}images/avatar/${image}`});
+      const editedUser = await user.save();
+      console.log("edited",editedUser);
+      return editedUser;
+    }else{
+      throw "no image supplied";
+    }
+  }
+
   async _delete(id) {
     await User.findByIdAndRemove(id);
   }

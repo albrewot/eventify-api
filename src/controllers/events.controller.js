@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const router = express.Router();
 const eventService = require("../services/event.service");
@@ -8,6 +9,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.post("/register", isAuth, register);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
+router.put("/image/:id", isAuth, changeEventImage);
 
 module.exports = router;
 
@@ -46,5 +48,27 @@ async function getUserEvents(req, res, next){
     : res.sendStatus(404);
   } catch(err){
     next(err);
+  }
+}
+
+async function changeEventImage(req, res, next){
+  console.log("files",req.files);
+  if(!req.files){
+    res.json({message: "no image supplied"});
+  }
+  const { image } = req.files;
+  if(image){
+    image.mv(path.resolve(process.cwd(), "public/images/events", image.name), async (error) => {
+      if(error){
+        next(error);
+      }
+      try {
+        const event = await eventService.changeEventImage(req.params.id, image.name);
+        console.log(event);
+        res.json({ message: "event image edited successfully", url: event.image, code: 103 });
+      } catch (err) {
+        next(err);
+      }
+    })
   }
 }

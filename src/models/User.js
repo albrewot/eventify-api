@@ -21,6 +21,10 @@ const UserSchema = new Schema({
   lastName: {
     type: String
   },
+  avatar:{
+    type: String,
+    default: ""
+  },
   email: {
     type: String,
     required: [true, "missing email"]

@@ -46,6 +46,22 @@ class EventService {
     }
     return events
   }
+
+  async changeEventImage(id, image){
+    const event = await Event.findById(id);
+    console.log("found", event);
+    if(!event) throw { type: "not found", message: "Event not found", code: 14 };
+    
+    if(image){
+      Object.assign(event, {image: `${process.env.HOSTNAME_HANDLER}images/events/${image}`});
+      const editedEvent = await event.save();
+      console.log("edited",editedEvent);
+      return editedEvent;
+    }else{
+      throw "no image supplied";
+    }
+  }
 }
+
 
 module.exports = new EventService();

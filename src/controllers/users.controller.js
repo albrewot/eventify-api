@@ -1,3 +1,6 @@
+const path = require("path");
+const os = require("os");
+const uuidv4 = require('uuid/v4');
 const express = require("express");
 const router = express.Router();
 const userService = require("../services/user.service");
@@ -8,6 +11,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.post("/register", register);
 router.get("/", isAuth, getAll);
 router.get("/:id", isAuth, getById);
+router.put("/avatar/:id", isAuth, changeAvatar);
 
 module.exports = router;
 
@@ -47,5 +51,28 @@ async function getById(req, res, next) {
       : res.sendStatus(404);
   } catch (err) {
     next(err);
+  }
+}
+
+async function changeAvatar(req, res, next){
+  console.log("files",req.files);
+  if(!req.files){
+    res.json({message: "no image supplied"});
+  }
+  const { image } = req.files;
+  if(image){
+    image.mv(path.resolve(process.cwd(), "public/images/avatar", image.name), async (error) => {
+      if(error){
+        next(error);
+      }
+      console.log(process.cwd(), "public/images",image.name);
+      try {
+        const user = await userService.changeAvatar(req.params.id, image.name);
+        console.log(user);
+        res.json({ message: "user avatar edited successfully", url: user.avatar ,code: 103 });
+      } catch (err) {
+        next(err);
+      }
+    })
   }
 }

@@ -6,6 +6,7 @@ const passport = require("passport");
 const cors = require("cors");
 const session = require("express-session");
 const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload")
 const routes = require("./src/routes");
 const mongoose = require("mongoose");
 const connectMongo = require("connect-mongo");
@@ -19,6 +20,7 @@ const mongoStore = connectMongo(session);
 require("./src/config/passport")(passport);
 
 //Middlewares
+app.use(fileUpload());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -32,6 +34,7 @@ app.use(cors());
 // );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static("public"));
 
 //Routes
 routes(app);
