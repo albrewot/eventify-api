@@ -58,7 +58,7 @@ async function changeEventImage(req, res, next){
   }
   const { image } = req.files;
   if(image){
-    image.mv(path.resolve(process.cwd(), "public/images/events", image.name), async (error) => {
+    image.mv(path.resolve(rootDir, "public/images/events", image.name), async (error) => {
       if(error){
         next(error);
       }

@@ -61,11 +61,12 @@ async function changeAvatar(req, res, next){
   }
   const { image } = req.files;
   if(image){
-    image.mv(path.resolve(process.cwd(), "public/images/avatar", image.name), async (error) => {
+    console.log("root........",rootDir);
+    image.mv(path.resolve(rootDir, "public/images/avatar", image.name), async (error) => {
       if(error){
         next(error);
       }
-      console.log(process.cwd(), "public/images",image.name);
+      
       try {
         const user = await userService.changeAvatar(req.params.id, image.name);
         console.log(user);
