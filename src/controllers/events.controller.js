@@ -37,38 +37,50 @@ async function getEventById(req, res, next) {
   }
 }
 
-async function getUserEvents(req, res, next){
-  try{
+async function getUserEvents(req, res, next) {
+  try {
     const events = await eventService.getUserEvents(req.params.id);
-    events ? res.json({
-      message: "user's event retrieved successfully",
-      data: events,
-      code: 115
-    })
-    : res.sendStatus(404);
-  } catch(err){
+    events
+      ? res.json({
+          message: "user's event retrieved successfully",
+          data: events,
+          code: 115
+        })
+      : res.sendStatus(404);
+  } catch (err) {
     next(err);
   }
 }
 
-async function changeEventImage(req, res, next){
-  console.log("files",req.files);
-  if(!req.files){
-    res.json({message: "no image supplied"});
+async function changeEventImage(req, res, next) {
+  console.log("files", req.files);
+  if (!req.files) {
+    res.json({ message: "no image supplied" });
   }
   const { image } = req.files;
-  if(image){
-    image.mv(path.resolve(rootDir, "public/images/events", image.name), async (error) => {
-      if(error){
-        next(error);
+  if (image) {
+    console.log("root........", rootDir);
+    image.mv(
+      path.resolve(rootDir, "public/images/events", image.name),
+      async error => {
+        if (error) {
+          next(error);
+        }
+        try {
+          const event = await eventService.changeEventImage(
+            req.params.id,
+            image.name
+          );
+          console.log(event);
+          res.json({
+            message: "event image edited successfully",
+            url: event.image,
+            code: 103
+          });
+        } catch (err) {
+          next(err);
+        }
       }
-      try {
-        const event = await eventService.changeEventImage(req.params.id, image.name);
-        console.log(event);
-        res.json({ message: "event image edited successfully", url: event.image, code: 103 });
-      } catch (err) {
-        next(err);
-      }
-    })
+    );
   }
 }
