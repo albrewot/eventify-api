@@ -56,38 +56,34 @@ async function getById(req, res, next) {
 
 async function changeAvatar(req, res, next) {
   console.log("files", req.files);
-  try {
-  } catch (err) {
-    next(err);
-    if (!req.files || !req.files.image) {
-      res.json({ message: "no image supplied" });
-    }
-    const { image } = req.files;
-    if (image) {
-      console.log("root........", rootDir);
-      image.mv(
-        path.resolve(rootDir, "public/images/avatar", image.name),
-        async error => {
-          if (error) {
-            next(error);
-          }
-
-          try {
-            const user = await userService.changeAvatar(
-              req.params.id,
-              image.name
-            );
-            console.log(user);
-            res.json({
-              message: "user avatar edited successfully",
-              url: user.avatar,
-              code: 103
-            });
-          } catch (err) {
-            next(err);
-          }
+  if (!req.files) {
+    res.json({ message: "no image supplied" });
+  }
+  const { image } = req.files;
+  if (image) {
+    console.log("root........", rootDir);
+    image.mv(
+      path.resolve(rootDir, "public/images/avatar", image.name),
+      async error => {
+        if (error) {
+          next(error);
         }
-      );
-    }
+
+        try {
+          const user = await userService.changeAvatar(
+            req.params.id,
+            image.name
+          );
+          console.log(user);
+          res.json({
+            message: "user avatar edited successfully",
+            url: user.avatar,
+            code: 103
+          });
+        } catch (err) {
+          next(err);
+        }
+      }
+    );
   }
 }
