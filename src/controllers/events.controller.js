@@ -54,7 +54,7 @@ async function getUserEvents(req, res, next) {
 
 async function changeEventImage(req, res, next) {
   console.log("files", req.files);
-  if (!req.files) {
+  if (!req.files || !req.files.image) {
     res.json({ message: "no image supplied" });
   }
   const { image } = req.files;
