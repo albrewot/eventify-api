@@ -15,7 +15,7 @@ const EventSchema = new Schema({
     default: null
     //required: true
   },
-  image:{
+  image: {
     type: String,
     default: ""
   },
