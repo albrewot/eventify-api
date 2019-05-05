@@ -54,33 +54,37 @@ async function getUserEvents(req, res, next) {
 
 async function changeEventImage(req, res, next) {
   console.log("files", req.files);
-  if (!req.files) {
-    res.json({ message: "no image supplied" });
-  }
-  const { image } = req.files;
-  if (image) {
-    console.log("root........", rootDir);
-    image.mv(
-      path.resolve(rootDir, "public/images/events", image.name),
-      async error => {
-        if (error) {
-          next(error);
+  try {
+    if (!req.files || !req.files.image) {
+      res.json({ message: "no image supplied" });
+    }
+    const { image } = req.files;
+    if (image) {
+      console.log("root........", rootDir);
+      image.mv(
+        path.resolve(rootDir, "public/images/events", image.name),
+        async error => {
+          if (error) {
+            next(error);
+          }
+          try {
+            const event = await eventService.changeEventImage(
+              req.params.id,
+              image.name
+            );
+            console.log(event);
+            res.json({
+              message: "event image edited successfully",
+              url: event.image,
+              code: 103
+            });
+          } catch (err) {
+            next(err);
+          }
         }
-        try {
-          const event = await eventService.changeEventImage(
-            req.params.id,
-            image.name
-          );
-          console.log(event);
-          res.json({
-            message: "event image edited successfully",
-            url: event.image,
-            code: 103
-          });
-        } catch (err) {
-          next(err);
-        }
-      }
-    );
+      );
+    }
+  } catch (err) {
+    next(err);
   }
 }
