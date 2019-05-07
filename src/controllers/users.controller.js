@@ -13,7 +13,7 @@ router.get("/", isAuth, getAll);
 router.get("/:id", isAuth, getById);
 router.put("/avatar/:id", isAuth, changeAvatar);
 router.put("/edit", isAuth, editUser);
-router.put("/change_password/:id", isAuth, changePassword);
+router.put("/change_password", isAuth, changePassword);
 
 module.exports = router;
 
@@ -93,7 +93,7 @@ async function changeAvatar(req, res, next) {
 async function changePassword(req, res, next) {
   console.log("password");
   try {
-    const response = await userService.changePassword(req.params.id, req.body);
+    const response = await userService.changePassword(req.body);
     console.log(response);
     if (response) {
       res.json({ message: "password updated" });
@@ -103,8 +103,10 @@ async function changePassword(req, res, next) {
   }
 }
 
-function editUser(res, req, next) {
+async function editUser(req, res, next) {
   try {
+    const response = await userService.editUser(req.body);
+    res.json({ message: "user edited successfully", data: response });
   } catch (err) {
     next(err);
   }

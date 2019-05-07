@@ -19,9 +19,10 @@ const UserSchema = new Schema({
     required: [true, "missing name"]
   },
   lastName: {
-    type: String
+    type: String,
+    default: ""
   },
-  avatar:{
+  avatar: {
     type: String,
     default: ""
   },
@@ -31,13 +32,16 @@ const UserSchema = new Schema({
   },
   tlf: [Phone],
   country: {
-    type: String
+    type: String,
+    default: ""
   },
   state: {
-    type: String
+    type: String,
+    default: ""
   },
   city: {
-    type: String
+    type: String,
+    default: ""
   },
   address: [Address],
   createdAt: {

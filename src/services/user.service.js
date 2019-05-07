@@ -14,9 +14,9 @@ class UserService {
   }
 
   //crea un usuario
-  async create(userParam) {
+  async create(params) {
     try {
-      const { username, password, email, name } = userParam;
+      const { username, password, email, name } = params;
       if (!username || !password || !email || !name) {
         throw {
           type: "missing",
@@ -39,7 +39,7 @@ class UserService {
           };
         }
 
-        const user = new User(userParam);
+        const user = new User(params);
 
         const hash = await bcrypt.hash(password, 10);
 
@@ -61,26 +61,67 @@ class UserService {
     }
   }
 
-  async update(id, userParam) {
-    const user = await User.findById(id);
+  async editUser(params) {
+    const user = await User.findById(params.id);
 
     //Valida si el usuario existe o ya esta usado
     if (!user) throw { type: "not found", message: "User not found", code: 14 };
+    if (!params.name || !params.email) {
+      throw { type: "empty", message: "name or email fields are empty" };
+    }
     if (
-      user.username !== userParam.username &&
-      (await User.findOne({ username: userParam.username }))
+      user.email !== params.email &&
+      (await User.findOne({ email: params.email }))
     ) {
       throw {
         type: "taken",
-        message: 'Username "' + userParam.username + '" is already taken',
+        message: `Email [${params.email}] is already taken`,
         code: 202
       };
+    } else {
+      Object.assign(user, {
+        email: params.email
+      });
     }
+    if (!params.lastName) {
+      params.lastName = "";
+    }
+    if (user.lastName !== params.lastName) {
+      Object.assign(user, {
+        lastName: params.lastName
+      });
+    }
+    if (user.name !== params.name) {
+      Object.assign(user, {
+        name: params.name
+      });
+    }
+    if (!params.tlf) {
+      params.tlf = [];
+    }
+    if (!params.address) {
+      params.address = [];
+    }
+    if (!params.country) {
+      params.country = "";
+    }
+    if (!params.city) {
+      params.city = "";
+    }
+    if (!params.state) {
+      params.state = "";
+    }
+    Object.assign(user, {
+      tlf: params.tlf,
+      address: params.address,
+      country: params.country,
+      city: params.city,
+      state: params.state
+    });
 
-    //asigna parametros al objeto user y lo guarda en db
-    Object.assign(user, userParam);
-
-    await user.save();
+    const editedUser = await user.save();
+    const { password, ...editted } = editedUser.toObject();
+    return editted;
   }
 
   async changeAvatar(id, image) {
@@ -100,10 +141,11 @@ class UserService {
     }
   }
 
-  async changePassword(id, params) {
-    console.log(id, params);
+  async changePassword(params) {
+    console.log(params);
     try {
-      const user = await User.findById(id);
+      const user = await User.findById(params.id);
+      console.log(user);
       if (!user)
         throw { type: "not found", message: "User not found", code: 14 };
       //si se ingreso password, la hashea
@@ -118,6 +160,7 @@ class UserService {
           console.log(editedUser, "edited");
           return editedUser;
         }
+        throw { message: "password doesn't match" };
       }
     } catch (err) {
       throw err;
