@@ -12,5 +12,11 @@ module.exports = {
   Event: require("../models/Event"),
   DialCode: require("../models/DialCode"),
   Country: require("../models/Country"),
-  Reference: require("../models/References")
+  Reference: require("../models/References"),
+  References: {
+    Category: require("../models/EventSelects/Category"),
+    Type: require("../models/EventSelects/Type"),
+    Modality: require("../models/EventSelects/Modality"),
+    Restriction: require("../models/EventSelects/Restriction")
+  }
 };
