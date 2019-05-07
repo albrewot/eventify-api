@@ -77,30 +77,50 @@ class UserService {
       };
     }
 
-    //si se ingreso password, la hashea
-    if (userParam.password) {
-      const hash = await bcrypt.hash(userParam.password, 10);
-      userParam.password = hash;
-    }
-
     //asigna parametros al objeto user y lo guarda en db
     Object.assign(user, userParam);
 
     await user.save();
   }
 
-  async changeAvatar(id, image){
+  async changeAvatar(id, image) {
     const user = await User.findById(id);
     console.log("found", user);
-    if(!user) throw { type: "not found", message: "User not found", code: 14 };
-    
-    if(image){
-      Object.assign(user, {avatar: `${process.env.HOSTNAME_HANDLER}images/avatar/${image}`});
+    if (!user) throw { type: "not found", message: "User not found", code: 14 };
+
+    if (image) {
+      Object.assign(user, {
+        avatar: `${process.env.HOSTNAME_HANDLER}images/avatar/${image}`
+      });
       const editedUser = await user.save();
-      console.log("edited",editedUser);
+      console.log("edited", editedUser);
       return editedUser;
-    }else{
+    } else {
       throw "no image supplied";
+    }
+  }
+
+  async changePassword(id, params) {
+    console.log(id, params);
+    try {
+      const user = await User.findById(id);
+      if (!user)
+        throw { type: "not found", message: "User not found", code: 14 };
+      //si se ingreso password, la hashea
+      if (params.old && params.new) {
+        const hash = await bcrypt.compare(params.old, user.password);
+        if (hash) {
+          const newHash = await bcrypt.hash(params.new, 10);
+          Object.assign(user, {
+            password: newHash
+          });
+          const editedUser = await user.save();
+          console.log(editedUser, "edited");
+          return editedUser;
+        }
+      }
+    } catch (err) {
+      throw err;
     }
   }
 

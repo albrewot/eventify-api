@@ -12,6 +12,8 @@ router.post("/register", register);
 router.get("/", isAuth, getAll);
 router.get("/:id", isAuth, getById);
 router.put("/avatar/:id", isAuth, changeAvatar);
+router.put("/edit", isAuth, editUser);
+router.put("/change_password/:id", isAuth, changePassword);
 
 module.exports = router;
 
@@ -85,5 +87,25 @@ async function changeAvatar(req, res, next) {
         }
       }
     );
+  }
+}
+
+async function changePassword(req, res, next) {
+  console.log("password");
+  try {
+    const response = await userService.changePassword(req.params.id, req.body);
+    console.log(response);
+    if (response) {
+      res.json({ message: "password updated" });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+
+function editUser(res, req, next) {
+  try {
+  } catch (err) {
+    next(err);
   }
 }
