@@ -7,8 +7,7 @@ const Phone = require("./Phone");
 const EventSchema = new Schema({
   name: {
     type: String,
-    required: true,
-    unique: true
+    required: true
   },
   description: {
     type: String,
@@ -48,19 +47,23 @@ const EventSchema = new Schema({
   address: [Address],
   tlf: [Phone],
   category: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
     required: [true, "missing category"]
   },
   type: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Type",
     required: [true, "missing type"]
   },
   restriction: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Restriction",
     required: [true, "missing restriction"]
   },
   modality: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Modality",
     required: [true, "missing modality"]
   },
   start_date: {

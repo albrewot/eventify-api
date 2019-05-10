@@ -9,6 +9,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.post("/register", isAuth, register);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
+router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
 
 module.exports = router;
@@ -82,5 +83,14 @@ async function changeEventImage(req, res, next) {
         }
       }
     );
+  }
+}
+
+async function editEvent(req, res, next) {
+  try {
+    const response = await eventService.editEvent(req.body);
+    res.json({ message: "Event edited successfully", data: response });
+  } catch (err) {
+    next(err);
   }
 }
