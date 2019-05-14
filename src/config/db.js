@@ -13,6 +13,7 @@ module.exports = {
   DialCode: require("../models/DialCode"),
   Country: require("../models/Country"),
   Reference: require("../models/References"),
+  Invitation: require("../models/Invitation"),
   References: {
     Category: require("../models/EventSelects/Category"),
     Type: require("../models/EventSelects/Type"),

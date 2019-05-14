@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const Address = require("./Address");
 const Phone = require("./Phone");
+const Pin = require("./Pin");
 
 const EventSchema = new Schema({
   name: {
@@ -74,6 +75,7 @@ const EventSchema = new Schema({
     type: Date,
     required: true
   },
+  pins: [Pin],
   createdAt: {
     type: Date,
     efault: Date.now

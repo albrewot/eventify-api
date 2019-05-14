@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt");
 const db = require("../config/db");
+const validation = require("../validations/user");
 const User = db.User;
 
 class UserService {
@@ -17,10 +18,12 @@ class UserService {
   async create(params) {
     try {
       const { username, password, email, name } = params;
-      if (!username || !password || !email || !name) {
+      const valid = await validation("register", params);
+      if (valid.error) {
+        // if (!username || !password || !email || !name) {
         throw {
-          type: "missing",
-          message: `Missing one or more of the following: username, email, password, name`,
+          type: "validation",
+          message: valid.error,
           code: 201
         };
       } else {
@@ -62,63 +65,33 @@ class UserService {
   }
 
   async editUser(params) {
-    const user = await User.findById(params.id);
-
+    const valid = await validation("edit", params);
+    console.log("edit user", valid);
+    if (valid.error) {
+      throw {
+        type: "validation",
+        message: valid.error,
+        code: 201
+      };
+    }
+    console.log("valid", valid);
+    const user = await User.findById(valid.id);
     //Valida si el usuario existe o ya esta usado
     if (!user) throw { type: "not found", message: "User not found", code: 14 };
-    if (!params.name || !params.email) {
-      throw { type: "empty", message: "name or email fields are empty" };
-    }
+
     if (
-      user.email !== params.email &&
-      (await User.findOne({ email: params.email }))
+      valid.email &&
+      user.email != valid.email &&
+      (await User.findOne({ email: valid.email }))
     ) {
       throw {
         type: "taken",
-        message: `Email [${params.email}] is already taken`,
+        message: `Email [${email}] is already taken`,
         code: 202
       };
-    } else {
-      Object.assign(user, {
-        email: params.email
-      });
     }
-    if (!params.lastName) {
-      params.lastName = "";
-    }
-    if (user.lastName !== params.lastName) {
-      Object.assign(user, {
-        lastName: params.lastName
-      });
-    }
-    if (user.name !== params.name) {
-      Object.assign(user, {
-        name: params.name
-      });
-    }
-    if (!params.tlf) {
-      params.tlf = [];
-    }
-    if (!params.address) {
-      params.address = [];
-    }
-    if (!params.country) {
-      params.country = "";
-    }
-    if (!params.city) {
-      params.city = "";
-    }
-    if (!params.state) {
-      params.state = "";
-    }
-    Object.assign(user, {
-      tlf: params.tlf,
-      address: params.address,
-      country: params.country,
-      city: params.city,
-      state: params.state
-    });
 
+    Object.assign(user, valid);
     const editedUser = await user.save();
     const { password, ...editted } = editedUser.toObject();
     return editted;

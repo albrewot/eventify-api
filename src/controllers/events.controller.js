@@ -7,6 +7,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 
 // Rutas para usuario
 router.post("/register", isAuth, register);
+router.post("/invitation/create", isAuth, createInvitations);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
@@ -90,6 +91,15 @@ async function editEvent(req, res, next) {
   try {
     const response = await eventService.editEvent(req.body);
     res.json({ message: "Event edited successfully", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function createInvitations(req, res, next) {
+  try {
+    const response = await eventService.createInvitations(req.body);
+    res.json({ message: response });
   } catch (err) {
     next(err);
   }

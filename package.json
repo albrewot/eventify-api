@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/albrewot/eventify-api#readme",
   "dependencies": {
+    "@hapi/joi": "^15.0.2",
     "bcrypt": "^3.0.6",
     "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.3",

@@ -1,19 +1,18 @@
 const db = require("../config/db");
+const validator = require("../validations/events");
 const Event = db.Event;
+const Invitation = db.Invitation;
 const User = db.User;
 
 class EventService {
-  async create(eventParam) {
-    console.log(eventParam);
-    // if (await Event.findOne({ name: eventParam.name })) {
-    //   throw {
-    //     type: "taken",
-    //     message: "There is already an event with that name",
-    //     code: 206
-    //   };
-    // }
+  async create(params) {
+    console.log(params);
+    const valid = await validator("register", params);
+    if (valid.error) {
+      throw { type: "validation", message: valid.error };
+    }
 
-    const event = new Event(eventParam);
+    const event = new Event(valid);
 
     await event.save();
   }
@@ -57,69 +56,17 @@ class EventService {
 
   async editEvent(params) {
     const event = await Event.findById(params.id);
-
-    //Valida si el usuario existe o ya esta usado
     if (!event)
       throw { type: "not found", message: "Event not found", code: 14 };
     console.log(params);
-    if (!params.name) {
-      params.name = event.name;
+
+    const valid = await validator("edit", params);
+    if (valid.error) {
+      throw { type: "validation", message: valid.error };
     }
-    if (!params.type) {
-      params.type = event.type;
-    }
-    if (!params.category) {
-      params.category = event.category;
-    }
-    if (!params.restriction) {
-      params.restriction = event.restriction;
-    }
-    if (!params.modality) {
-      params.modality = event.modality;
-    }
-    if (!params.start_date) {
-      params.start_date = event.start_date;
-    }
-    if (!params.finish_date) {
-      params.finish_date = event.finish_date;
-    }
-    if (!params.description) {
-      params.description = event.description;
-    }
-    if (event.description !== params.description) {
-      Object.assign(event, {
-        description: params.description
-      });
-    }
-    if (!params.tlf) {
-      params.tlf = event.tlf;
-    }
-    if (!params.address) {
-      params.address = event.address;
-    }
-    if (!params.country) {
-      params.country = event.country;
-    }
-    if (!params.city) {
-      params.city = event.city;
-    }
-    if (!params.state) {
-      params.state = event.state;
-    }
-    Object.assign(event, {
-      tlf: params.tlf,
-      address: params.address,
-      country: params.country,
-      city: params.city,
-      state: params.state,
-      category: params.category,
-      type: params.type,
-      restriction: params.restriction,
-      modality: params.modality,
-      start_date: params.start_date,
-      finish_date: params.finish_date,
-      name: params.name
-    });
+    console.log(valid);
+
+    Object.assign(event, valid);
 
     const edited = await event.save();
     return edited;
@@ -157,6 +104,49 @@ class EventService {
       return editedEvent;
     } else {
       throw "no image supplied";
+    }
+  }
+
+  async createInvitations(params) {
+    const valid = await validator("invitation_create", params);
+    if (valid.error) {
+      throw { type: "validation", message: valid.error };
+    }
+    const event = await Event.findById(valid.event);
+    console.log("found", event);
+    if (!event)
+      throw { type: "not found", message: "Event not found", code: 14 };
+    console.log(valid);
+    let notFound = [];
+    let invitations = [];
+    for (let email of valid.emails) {
+      console.log("wdad", email);
+      const user = await User.findOne({ email });
+      console.log("inv", user);
+      if (!user) {
+        notFound.push(email);
+      } else {
+        const invitation = {
+          event: valid.event,
+          user: user.id
+        };
+        invitations.push(invitation);
+      }
+    }
+    console.log(notFound, invitations);
+    if (invitations.length > 0) {
+      const newInvitations = await Invitation.create(invitations);
+      if (newInvitations) {
+        return { invitations: newInvitations, notfound: notFound };
+      } else {
+        throw {
+          type: "failed",
+          message: `Error while creating invitations`,
+          code: 204
+        };
+      }
+    } else {
+      return { notfound: notFound };
     }
   }
 }
