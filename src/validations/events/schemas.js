@@ -28,7 +28,7 @@ const EventEditSchema = Joi.object().keys({
   id: Joi.string().required(),
   name: Joi.string(),
   description: Joi.string(),
-  start_date: Joi.date().min("now"),
+  start_date: Joi.date(),
   finish_date: Joi.date().min(Joi.ref("start_date")),
   category: Joi.string(),
   type: Joi.string(),
