@@ -10,6 +10,11 @@ const EventRegisterSchema = Joi.object().keys({
   finish_date: Joi.date()
     .min(Joi.ref("start_date"))
     .required(),
+  address: Joi.array().items(
+    Joi.object().keys({
+      description: Joi.string()
+    })
+  ),
   category: Joi.string().required(),
   type: Joi.string().required(),
   restriction: Joi.string().required(),
