@@ -5,7 +5,7 @@ const Country = db.Country;
 class CountryService {
   //Todos los paises
   async getAllCountries() {
-    return await Country.find({});
+    return await Country.find({}).sort("name");
   }
 
   //Crea varios paises

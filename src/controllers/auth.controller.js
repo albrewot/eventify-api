@@ -28,7 +28,7 @@ function login(req, res, next) {
       }
 
       const token = jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: "15s"
+        expiresIn: "24h"
       });
 
       return res.json({ type: "success", user, token, code: 101 });
