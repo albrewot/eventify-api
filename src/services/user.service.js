@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const db = require("../config/db");
 const validation = require("../validations/user");
 const User = db.User;
+const Event = db.Event;
+const Invitation = db.Invitation;
 
 class UserService {
   //se trae a todos los usuarios de la collecion, sin hash
@@ -140,8 +142,105 @@ class UserService {
     }
   }
 
-  async _delete(id) {
-    await User.findByIdAndRemove(id);
+  async getUserInvitations(id) {
+    const invitations = await Invitation.find({ event: id })
+      .where("active")
+      .equals(true);
+    if (invitations) {
+      return invitations;
+    } else {
+      throw {
+        type: "not found",
+        message: "invitations not found"
+      };
+    }
+  }
+
+  async confirmUserInvitation(params, id) {
+    const invitation = await Invitation.findById(id);
+    const event = await Event.findById(invitation.event);
+    const { active, status, used } = invitation;
+    console.log(invitation);
+    if (invitation && active) {
+      if (status !== "pending" || used) {
+        throw {
+          type: "already used",
+          message: "this invitation was already used or declined",
+          data: invitation
+        };
+      } else {
+        if (event) {
+          console.log("hue", event);
+          if (event.guests.length > 0) {
+            for (let guest of event.guests) {
+              console.log("guest id", guest);
+              if (guest === invitation.user) {
+                throw {
+                  type: "already exist",
+                  message: "User already exist in the guest list",
+                  data: invitation
+                };
+              }
+              console.log("before", event.guests, guest);
+              event.guests.push(invitation.user);
+              console.log(">", event.guests);
+            }
+          } else {
+            event.guests.push(invitation.user);
+            console.log("<", event.guests);
+          }
+        } else {
+          throw {
+            type: "not found",
+            message: "event id was not found",
+            data: id
+          };
+        }
+        switch (params.confirm) {
+          case "1":
+            Object.assign(invitation, { status: "accepted", used: true });
+            break;
+          case "2":
+            Object.assign(invitation, { status: "declined", used: true });
+            break;
+        }
+        const confirmedInvitation = await invitation.save();
+        console.log("confirmed inv", confirmedInvitation);
+        if (confirmedInvitation && params.confirm == "1") {
+          console.log("accepted");
+          const newGuestList = await event.save();
+          if (newGuestList) {
+            return { guest: id };
+          } else {
+            throw {
+              type: "failed",
+              message: "Error while adding guest ot the event guest list",
+              data: id
+            };
+          }
+        } else if (confirmedInvitation && params.confirm == "2") {
+          return { data: invitation, invitation: "was declined" };
+        } else {
+          throw {
+            type: "failed",
+            message: "Error while confirming invitation",
+            data: invitation
+          };
+        }
+      }
+    } else if (invitation && !active) {
+      throw {
+        type: "invitation disabled",
+        message: "this invitation was already disabled",
+        data: invitation
+      };
+    } else {
+      throw {
+        type: "not found",
+        message: "invitation id was not found",
+        data: id
+      };
+    }
   }
 }
 

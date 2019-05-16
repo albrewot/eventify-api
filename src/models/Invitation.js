@@ -19,6 +19,10 @@ const InvitationSchema = new Schema({
   used: {
     type: Boolean,
     default: false
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 });
 

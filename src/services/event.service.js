@@ -149,6 +149,36 @@ class EventService {
       return { notfound: notFound };
     }
   }
+
+  async getEventInvitations(id) {
+    const invitations = await Invitation.find({ event: id })
+      .where("active")
+      .equals(true);
+    if (invitations) {
+      return invitations;
+    } else {
+      throw {
+        type: "not found",
+        message: "invitations not found"
+      };
+    }
+  }
+
+  async deleteEventInvitation(id) {
+    const invitation = await Invitation.findById(id);
+    console.log(invitation);
+    if (invitation && invitation.active === true) {
+      Object.assign(invitation, { active: false });
+      const deletedInvitation = await invitation.save();
+      return deletedInvitation;
+    } else {
+      throw {
+        type: "not found",
+        message: "invitation id provided was not found",
+        data: id
+      };
+    }
+  }
 }
 
 module.exports = new EventService();

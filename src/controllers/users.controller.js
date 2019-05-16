@@ -11,9 +11,11 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.post("/register", register);
 router.get("/", isAuth, getAll);
 router.get("/:id", isAuth, getById);
+router.get("/invitation/:id", isAuth, getUserInvitations);
 router.put("/avatar/:id", isAuth, changeAvatar);
 router.put("/edit", isAuth, editUser);
 router.put("/change_password", isAuth, changePassword);
+router.put("/invitation/:id/confirm", isAuth, confirmUserInvitation);
 
 module.exports = router;
 
@@ -107,6 +109,35 @@ async function editUser(req, res, next) {
   try {
     const response = await userService.editUser(req.body);
     res.json({ message: "user edited successfully", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getUserInvitations(req, res, next) {
+  try {
+    const response = await userService.getUserInvitations(req.params.id);
+    res.json({
+      type: "success",
+      message: "User invitations retrieved successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function confirmUserInvitation(req, res, next) {
+  try {
+    const response = await userService.confirmUserInvitation(
+      req.body,
+      req.params.id
+    );
+    res.json({
+      type: "success",
+      message: "User invitation confirmed successfully",
+      data: response
+    });
   } catch (err) {
     next(err);
   }

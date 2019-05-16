@@ -8,6 +8,8 @@ const { isAuth } = require("../middlewares/auth.middleware");
 // Rutas para usuario
 router.post("/register", isAuth, register);
 router.post("/invitation/create", isAuth, createInvitations);
+router.put("/invitation/delete/:id", isAuth, deleteEventInvitation);
+router.get("/:id/invitations", isAuth, getEventInvitations);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
@@ -100,6 +102,32 @@ async function createInvitations(req, res, next) {
   try {
     const response = await eventService.createInvitations(req.body);
     res.json({ message: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getEventInvitations(req, res, next) {
+  try {
+    const response = await eventService.getEventInvitations(req.params.id);
+    res.json({
+      type: "success",
+      message: "Invitations retrieved successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteEventInvitation(req, res, next) {
+  try {
+    const response = await eventService.deleteEventInvitation(req.params.id);
+    res.json({
+      type: "success",
+      message: "Invitation deleted successfully",
+      data: response
+    });
   } catch (err) {
     next(err);
   }
