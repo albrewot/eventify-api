@@ -4,9 +4,7 @@ const EventRegisterSchema = Joi.object().keys({
   name: Joi.string().required(),
   host: Joi.string().required(),
   description: Joi.string().default(null),
-  start_date: Joi.date()
-    .min("now")
-    .required(),
+  start_date: Joi.date().required(),
   finish_date: Joi.date()
     .min(Joi.ref("start_date"))
     .required(),
