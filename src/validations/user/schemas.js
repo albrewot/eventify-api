@@ -14,6 +14,9 @@ const UserRegisterSchema = Joi.object().keys({
 const UserEditSchema = Joi.object().keys({
   id: Joi.string().required(),
   name: Joi.string(),
+  aboutMe: Joi.string(),
+  birthDate: Joi.date(),
+  genre: Joi.string(),
   email: Joi.string().email(),
   lastName: Joi.string(),
   tlf: Joi.array().items(

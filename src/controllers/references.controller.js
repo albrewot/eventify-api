@@ -9,11 +9,13 @@ router.get("/type", isAuth, getType);
 router.get("/category", isAuth, getCategory);
 router.get("/restriction", isAuth, getRestriction);
 router.get("/modality", isAuth, getModality);
+router.get("/genre", isAuth, getGenre);
 
 router.post("/type/create", isAuth, createType);
 router.post("/category/create", isAuth, createCategory);
 router.post("/restriction/create", isAuth, createRestriction);
 router.post("/modality/create", isAuth, createModality);
+router.post("/genre/create", isAuth, createGenre);
 //router.get("/category/:id", isAuth, getReferenceByParent);
 //router.post("/register_all", isAuth, registerReferences);
 
@@ -89,9 +91,19 @@ async function createRestriction(req, res, next) {
     next(err);
   }
 }
+
 async function createModality(req, res, next) {
   try {
     const response = await ReferenceService.createModality(req.body);
+    res.send({ message: "success", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function createGenre(req, res, next) {
+  try {
+    const response = await ReferenceService.createGenre(req.body);
     res.send({ message: "success", data: response });
   } catch (err) {
     next(err);
@@ -126,6 +138,14 @@ async function getRestriction(req, res, next) {
 async function getModality(req, res, next) {
   try {
     const response = await ReferenceService.getModality();
+    res.send({ message: "success", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+async function getGenre(req, res, next) {
+  try {
+    const response = await ReferenceService.getGenre();
     res.send({ message: "success", data: response });
   } catch (err) {
     next(err);

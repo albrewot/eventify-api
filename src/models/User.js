@@ -22,6 +22,19 @@ const UserSchema = new Schema({
     type: String,
     default: ""
   },
+  birthDate: {
+    type: Date,
+    default: null
+  },
+  genre: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Genre",
+    default: null
+  },
+  aboutMe: {
+    type: String,
+    default: ""
+  },
   avatar: {
     type: String,
     default: ""

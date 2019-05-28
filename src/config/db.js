@@ -18,6 +18,7 @@ module.exports = {
     Category: require("../models/EventSelects/Category"),
     Type: require("../models/EventSelects/Type"),
     Modality: require("../models/EventSelects/Modality"),
-    Restriction: require("../models/EventSelects/Restriction")
+    Restriction: require("../models/EventSelects/Restriction"),
+    Genre: require("../models/EventSelects/Genre")
   }
 };

@@ -143,7 +143,7 @@ class UserService {
   }
 
   async getUserInvitations(id) {
-    const invitations = await Invitation.find({ event: id })
+    const invitations = await Invitation.find({ user: id })
       .where("active")
       .equals(true);
     if (invitations) {

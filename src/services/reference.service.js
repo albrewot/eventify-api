@@ -122,6 +122,18 @@ class ReferenceService {
     }
   }
 
+  async getGenre() {
+    try {
+      const references = await References.Genre.find({});
+      if (!references || references.length <= 0) {
+        throw { type: "not found", message: "No genre found", code: 212 };
+      }
+      return references;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async createType(params) {
     try {
       if (params.length == 0 || !params) {
@@ -207,6 +219,29 @@ class ReferenceService {
       }
 
       const newRef = await References.Modality.create(params);
+      if (newRef) {
+        return newRef;
+      }
+    } catch (err) {
+      throw err;
+    }
+  }
+  async createGenre(params) {
+    try {
+      if (params.length == 0 || !params) {
+        throw { message: "no genres supplied" };
+      }
+      for (let ref of params) {
+        if (await References.Genre.findOne({ name: ref.name })) {
+          throw {
+            type: "taken",
+            message: `Genre [${ref.name}] already exists`,
+            code: 209
+          };
+        }
+      }
+
+      const newRef = await References.Genre.create(params);
       if (newRef) {
         return newRef;
       }
