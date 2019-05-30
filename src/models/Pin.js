@@ -2,13 +2,10 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const PinSchema = new Schema({
-  title: {
-    type: String,
-    required: [true, "missing title number"]
-  },
-  image: {
-    type: String,
-    required: [true, "missing image number"]
+  event: {
+    type: Schema.Types.ObjectId,
+    ref: "Event",
+    required: [true, "missing event id"]
   },
   latitude: {
     type: String,
@@ -17,9 +14,14 @@ const PinSchema = new Schema({
   longitude: {
     type: String,
     required: [true, "missing longitude number"]
+  },
+  active: {
+    type: Boolean,
+    required: [true, "missing pin active"],
+    default: false
   }
 });
 
 PinSchema.set("toJSON", { virtuals: true });
 
-module.exports = PinSchema;
+module.exports = mongoose.model("Pin", PinSchema);

@@ -2,6 +2,7 @@ const db = require("../config/db");
 const validator = require("../validations/events");
 const Event = db.Event;
 const Invitation = db.Invitation;
+const Pin = db.Pin;
 const User = db.User;
 
 class EventService {
@@ -178,6 +179,89 @@ class EventService {
         data: id
       };
     }
+  }
+
+  async getAllPins() {
+    const pins = await Pin.find({ active: true });
+    console.log(pins);
+    if (!pins || pins.length < 1) {
+      throw { type: "not found", message: "Couldn't find any active pin" };
+    }
+    return pins;
+  }
+
+  async getEventPin(id) {
+    const event = await Event.findById(id);
+    if (!event) {
+      throw {
+        type: "not found",
+        message: "Couldn't find any event with provided id"
+      };
+    }
+    const pins = await Pin.find({ event: id });
+    if (!pins || pins.length < 1) {
+      throw { type: "not found", message: "this event has no pins" };
+    }
+    return pins;
+  }
+
+  async createPin(params) {
+    const event = await Event.findById(params.event);
+    console.log(event);
+    if (!event) {
+      throw {
+        type: "not found",
+        message: "Event was not found | cannot create pin"
+      };
+    }
+    const valid = await validator("pin_create", params);
+    if (valid.error) {
+      throw { type: "validation", message: valid.error };
+    }
+
+    Object.assign(valid, { active: event.published });
+
+    const pin = new Pin(valid);
+
+    const newPin = await pin.save();
+
+    return newPin;
+  }
+
+  async editPin(id, params) {
+    const pin = await Pin.findById(id);
+    if (!pin) {
+      throw {
+        type: "not found",
+        message: "Pin was not found | cannot edit pin"
+      };
+    }
+    const valid = await validator("pin_edit", params);
+    if (valid.error) {
+      throw { type: "validation", message: valid.error };
+    }
+    Object.assign(pin, valid);
+
+    const editedPin = await pin.save();
+
+    return editedPin;
+  }
+
+  async deletePin(id) {
+    const pin = await Pin.findById(id);
+    if (!pin) {
+      throw {
+        type: "not found",
+        message: "Pin was not found | cannot delete pin"
+      };
+    }
+    const deleted = await Pin.findByIdAndDelete(id);
+
+    if (!deleted) {
+      throw { type: "query status", message: "pin was not deleted" };
+    }
+
+    return deleted;
   }
 }
 

@@ -45,7 +45,8 @@ const EventEditSchema = Joi.object().keys({
   ),
   country: Joi.string(),
   state: Joi.string(),
-  city: Joi.string()
+  city: Joi.string(),
+  status: Joi.boolean()
 });
 
 const InvitationCreateSchema = Joi.object().keys({
@@ -55,8 +56,21 @@ const InvitationCreateSchema = Joi.object().keys({
     .required()
 });
 
+const PinCreateSchema = Joi.object().keys({
+  event: Joi.string().required(),
+  latitude: Joi.number().required(),
+  longitude: Joi.number().required()
+});
+
+const PinEditSchema = Joi.object().keys({
+  latitude: Joi.number(),
+  longitude: Joi.number()
+});
+
 module.exports = {
   EventRegisterSchema,
   EventEditSchema,
-  InvitationCreateSchema
+  InvitationCreateSchema,
+  PinCreateSchema,
+  PinEditSchema
 };

@@ -7,13 +7,21 @@ const { isAuth } = require("../middlewares/auth.middleware");
 
 // Rutas para usuario
 router.post("/register", isAuth, register);
+//invitaciones
 router.post("/invitation/create", isAuth, createInvitations);
 router.put("/invitation/delete/:id", isAuth, deleteEventInvitation);
 router.get("/:id/invitations", isAuth, getEventInvitations);
+//info de evento
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
+//pin del mapa
+router.post("/pin/create", isAuth, createPin);
+router.put("/pin/:id/edit", isAuth, editPin);
+router.delete("/pin/:id/delete", isAuth, deletePin);
+router.get("/pin/get", isAuth, getAllPins);
+router.get("/pin/:id/get", isAuth, getEventPin);
 
 module.exports = router;
 
@@ -126,6 +134,72 @@ async function deleteEventInvitation(req, res, next) {
     res.json({
       type: "success",
       message: "Invitation deleted successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getAllPins(req, res, next) {
+  try {
+    const response = await eventService.getAllPins();
+    1;
+    res.json({
+      type: "success",
+      message: "Pins retrieved successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getEventPin(req, res, next) {
+  try {
+    const response = await eventService.getEventPin(req.params.id);
+    res.json({
+      type: "success",
+      message: "Pins retrieved successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function createPin(req, res, next) {
+  try {
+    const response = await eventService.createPin(req.body);
+    res.json({
+      type: "success",
+      message: "Pin created successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function editPin(req, res, next) {
+  try {
+    const response = await eventService.editPin(req.params.id, req.body);
+    res.json({
+      type: "success",
+      message: "Pin edited successfully",
+      data: response
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deletePin(req, res, next) {
+  try {
+    const response = await eventService.deletePin(req.params.id);
+    res.json({
+      type: "success",
+      message: "Pin deleted successfully",
       data: response
     });
   } catch (err) {

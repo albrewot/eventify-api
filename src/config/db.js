@@ -14,6 +14,7 @@ module.exports = {
   Country: require("../models/Country"),
   Reference: require("../models/References"),
   Invitation: require("../models/Invitation"),
+  Pin: require("../models/Pin"),
   References: {
     Category: require("../models/EventSelects/Category"),
     Type: require("../models/EventSelects/Type"),

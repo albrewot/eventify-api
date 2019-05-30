@@ -75,10 +75,17 @@ const EventSchema = new Schema({
     type: Date,
     required: true
   },
-  pins: [Pin],
+  published: {
+    type: Boolean,
+    default: false
+  },
+  status: {
+    type: Boolean,
+    default: true
+  },
   createdAt: {
     type: Date,
-    efault: Date.now
+    default: Date.now
   },
   lastUpdate: {
     type: Date,

@@ -39,6 +39,14 @@ const switchEventSchema = (schema, body) => {
       result = selectSchema(schemas.InvitationCreateSchema, body);
       break;
     }
+    case "pin_create": {
+      result = selectSchema(schemas.PinCreateSchema, body);
+      break;
+    }
+    case "pin_edit": {
+      result = selectSchema(schemas.PinEditSchema, body);
+      break;
+    }
     default:
       result = { message: "error" };
   }
