@@ -21,7 +21,7 @@ router.post("/pin/create", isAuth, createPin);
 router.put("/pin/:id/edit", isAuth, editPin);
 router.delete("/pin/:id/delete", isAuth, deletePin);
 router.get("/pin/get", isAuth, getAllPins);
-router.get("/pin/:id/get", isAuth, getEventPin);
+router.get("/:event/pin/get_all", isAuth, getEventPin);
 
 module.exports = router;
 
@@ -196,7 +196,7 @@ async function editPin(req, res, next) {
 
 async function deletePin(req, res, next) {
   try {
-    const response = await eventService.deletePin(req.params.id);
+    const response = await eventService.deletePin(req.params.event);
     res.json({
       type: "success",
       message: "Pin deleted successfully",

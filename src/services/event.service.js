@@ -190,8 +190,8 @@ class EventService {
     return pins;
   }
 
-  async getEventPin(id) {
-    const event = await Event.findById(id);
+  async getEventPin(event) {
+    const event = await Event.findById(event);
     if (!event) {
       throw {
         type: "not found",
