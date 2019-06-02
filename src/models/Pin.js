@@ -15,6 +15,14 @@ const PinSchema = new Schema({
     type: String,
     required: [true, "missing longitude number"]
   },
+  title: {
+    type: String,
+    required: [true, "missing pin title"]
+  },
+  image: {
+    type: String,
+    default: null
+  },
   active: {
     type: Boolean,
     required: [true, "missing pin active"],

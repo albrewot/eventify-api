@@ -59,12 +59,16 @@ const InvitationCreateSchema = Joi.object().keys({
 const PinCreateSchema = Joi.object().keys({
   event: Joi.string().required(),
   latitude: Joi.number().required(),
-  longitude: Joi.number().required()
+  longitude: Joi.number().required(),
+  title: Joi.string().required(),
+  image: Joi.string()
 });
 
 const PinEditSchema = Joi.object().keys({
   latitude: Joi.number(),
-  longitude: Joi.number()
+  longitude: Joi.number(),
+  title: Joi.string(),
+  image: Joi.string()
 });
 
 module.exports = {
