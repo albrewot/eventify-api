@@ -192,13 +192,14 @@ class EventService {
 
   async getEventPin(eventId) {
     const event = await Event.findById(eventId);
+    console.log(event, eventId);
     if (!event) {
       throw {
         type: "not found",
         message: "Couldn't find any event with provided id"
       };
     }
-    const pins = await Pin.find({ event: id });
+    const pins = await Pin.find({ event: eventId });
     if (!pins || pins.length < 1) {
       throw { type: "not found", message: "this event has no pins" };
     }

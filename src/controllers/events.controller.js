@@ -157,7 +157,7 @@ async function getAllPins(req, res, next) {
 
 async function getEventPin(req, res, next) {
   try {
-    const response = await eventService.getEventPin(req.params.id);
+    const response = await eventService.getEventPin(req.params.event);
     res.json({
       type: "success",
       message: "Pins retrieved successfully",
