@@ -15,7 +15,7 @@ class EventService {
 
     const event = new Event(valid);
 
-    await event.save();
+    return await event.save();
   }
 
   async getEventById(eventId) {
@@ -73,23 +73,6 @@ class EventService {
     return edited;
   }
 
-  async changeAvatar(id, image) {
-    const user = await User.findById(id);
-    console.log("found", user);
-    if (!user) throw { type: "not found", message: "User not found", code: 14 };
-
-    if (image) {
-      Object.assign(user, {
-        avatar: `${process.env.HOSTNAME_HANDLER}images/avatar/${image}`
-      });
-      const editedUser = await user.save();
-      console.log("edited", editedUser);
-      return editedUser;
-    } else {
-      throw "no image supplied";
-    }
-  }
-
   async changeEventImage(id, image) {
     const event = await Event.findById(id);
     console.log("found", event);
@@ -106,6 +89,57 @@ class EventService {
     } else {
       throw "no image supplied";
     }
+  }
+
+  async publishEvent(eventId) {
+    const event = await Event.findById(eventId);
+    if (!event)
+      throw { type: "not found", message: "Event not found", code: 14 };
+
+    switch (event.publish_status) {
+      case "published":
+        throw { type: "validation", message: "Event is already published" };
+      case "finished":
+        throw {
+          type: "validation",
+          message: "Event was finished, can't publish again"
+        };
+      case "draft":
+        Object.assign(event, {
+          publish_status: "published"
+        });
+        break;
+      default:
+        throw {
+          type: "validation",
+          message: "Invalid event status"
+        };
+    }
+    return await event.save();
+  }
+
+  async finishEvent(eventId) {
+    const event = await Event.findById(eventId);
+    if (!event)
+      throw { type: "not found", message: "Event not found", code: 14 };
+
+    switch (event.publish_status) {
+      case "published":
+        Object.assign(event, {
+          publish_status: "finished"
+        });
+        break;
+      case "finished":
+        throw { type: "validation", message: "Event is already finished" };
+      case "draft":
+        throw { type: "validation", message: "Event status must be published" };
+      default:
+        throw {
+          type: "validation",
+          message: "Invalid event status"
+        };
+    }
+    return await event.save();
   }
 
   async createInvitations(params) {
@@ -219,8 +253,11 @@ class EventService {
     if (valid.error) {
       throw { type: "validation", message: valid.error };
     }
-
-    Object.assign(valid, { active: event.published });
+    if (event.publish_status === "published") {
+      Object.assign(valid, { active: true });
+    } else {
+      Object.assign(valid, { active: false });
+    }
 
     const pin = new Pin(valid);
 

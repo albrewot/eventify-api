@@ -5,7 +5,7 @@ const eventService = require("../services/event.service");
 
 const { isAuth } = require("../middlewares/auth.middleware");
 
-// Rutas para usuario
+// Rutas para evento
 router.post("/register", isAuth, register);
 //invitaciones
 router.post("/invitation/create", isAuth, createInvitations);
@@ -16,6 +16,8 @@ router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
+router.put("/publish/:id", isAuth, publishEvent);
+router.put("/finish/:id", isAuth, finishEvent);
 //pin del mapa
 router.post("/pin/create", isAuth, createPin);
 router.put("/pin/:id/edit", isAuth, editPin);
@@ -101,6 +103,24 @@ async function editEvent(req, res, next) {
   try {
     const response = await eventService.editEvent(req.body);
     res.json({ message: "Event edited successfully", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function publishEvent(req, res, next) {
+  try {
+    const response = await eventService.publishEvent(req.params.id);
+    res.json({ message: "Event published successfully", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function finishEvent(req, res, next) {
+  try {
+    const response = await eventService.finishEvent(req.params.id);
+    res.json({ message: "Event finished successfully", data: response });
   } catch (err) {
     next(err);
   }

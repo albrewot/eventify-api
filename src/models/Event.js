@@ -75,9 +75,9 @@ const EventSchema = new Schema({
     type: Date,
     required: true
   },
-  published: {
-    type: Boolean,
-    default: false
+  publish_status: {
+    type: String,
+    default: "draft"
   },
   status: {
     type: Boolean,
