@@ -12,6 +12,7 @@ router.post("/invitation/create", isAuth, createInvitations);
 router.put("/invitation/delete/:id", isAuth, deleteEventInvitation);
 router.get("/:id/invitations", isAuth, getEventInvitations);
 //info de evento
+router.get("/published", isAuth, getEventsPerPage);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
@@ -58,6 +59,26 @@ async function getUserEvents(req, res, next) {
       ? res.json({
           message: "user's event retrieved successfully",
           data: events,
+          code: 115
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getEventsPerPage(req, res, next) {
+  let query = null;
+  if (req.query) {
+    query = req.query;
+  }
+  try {
+    const events = await eventService.getEventsPerPage(query);
+    events
+      ? res.json({
+          message: "events retrieved successfully",
+          data: events.events,
+          page: events.page,
           code: 115
         })
       : res.sendStatus(404);
@@ -216,7 +237,7 @@ async function editPin(req, res, next) {
 
 async function deletePin(req, res, next) {
   try {
-    const response = await eventService.deletePin(req.params.event);
+    const response = await eventService.deletePin(req.params.id);
     res.json({
       type: "success",
       message: "Pin deleted successfully",

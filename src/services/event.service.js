@@ -55,6 +55,40 @@ class EventService {
     return events;
   }
 
+  async getEventsPerPage(query) {
+    console.log(query);
+    let perPage = 10;
+    let pagination = 0;
+
+    if (query && query.page > 0) {
+      pagination = query.page - 1;
+    } else if (query && !query.page) {
+      throw {
+        type: "wrong qs",
+        message: "Invalid Query String, must be page"
+      };
+    }
+    const events = await Event.find({ publish_status: "published" })
+      .populate("host", "-password")
+      .populate("guests")
+      .populate("category")
+      .populate("type")
+      .populate("restriction")
+      .populate("modality")
+      .skip(perPage * pagination)
+      .limit(perPage);
+    console.log(events);
+    if (!events || events.length == 0) {
+      throw {
+        type: "not found",
+        message: "There is no published events",
+        page: pagination + 1,
+        code: 117
+      };
+    }
+    return { events, page: pagination + 1 };
+  }
+
   async editEvent(params) {
     const event = await Event.findById(params.id);
     if (!event)
@@ -287,6 +321,7 @@ class EventService {
 
   async deletePin(id) {
     const pin = await Pin.findById(id);
+    console.log(pin);
     if (!pin) {
       throw {
         type: "not found",
