@@ -132,12 +132,10 @@ class EventService {
 
     switch (status) {
       case "published":
-        if (event.publish_status === "published") {
-          throw { type: "validation", message: "Event is already published" };
-        } else if (event.publish_status === "finished") {
+        if (event.publish_status !== "draft") {
           throw {
             type: "validation",
-            message: "Event was finished, can't publish again"
+            message: "Event must have status draft to be published"
           };
         }
         Object.assign(event, {
@@ -145,17 +143,10 @@ class EventService {
         });
         break;
       case "finished":
-        if (event.publish_status === "finished") {
-          throw { type: "validation", message: "Event is already finished" };
-        } else if (event.publish_status === "draft") {
+        if (event.publish_status !== "published") {
           throw {
             type: "validation",
-            message: "Event status must be published"
-          };
-        } else if (event.publish_status === "cancelled") {
-          throw {
-            type: "validation",
-            message: "Can't finish a cancelled event"
+            message: "Event must have status published to be finished"
           };
         }
         Object.assign(event, {
@@ -180,6 +171,19 @@ class EventService {
         };
     }
     return await event.save();
+  }
+
+  async copyEventToDraft(eventId) {
+    const event = await Event.findById(eventId);
+    if (!event)
+      throw { type: "not found", message: "Event not found", code: 14 };
+    const { _id, createdAt, lastUpdate, ...newCopy } = event.toObject();
+    Object.assign(event, {
+      publish_status: "draft",
+      guests: []
+    });
+    console.log(newCopy);
+    return await Event.create(newCopy);
   }
 
   async deleteEvent(eventId) {

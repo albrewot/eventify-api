@@ -18,6 +18,7 @@ router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
 router.put("/change_status/:id", isAuth, changeEventPublishStatus);
+router.post("/copy", isAuth, copyEventToDraft);
 router.delete("/delete/:id", isAuth, deleteEvent);
 //pin del mapa
 router.post("/pin/create", isAuth, createPin);
@@ -144,6 +145,18 @@ async function changeEventPublishStatus(req, res, next) {
     res.json({
       message: "Event status edited successfully",
       data: { eventId: response.id, publish_status: response.publish_status }
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function copyEventToDraft(req, res, next) {
+  try {
+    const response = await eventService.copyEventToDraft(req.body.id);
+    res.json({
+      message: "Event draft copy created successfully",
+      data: response
     });
   } catch (err) {
     next(err);
