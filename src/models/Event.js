@@ -75,6 +75,14 @@ const EventSchema = new Schema({
     type: Date,
     required: true
   },
+  private: {
+    type: Boolean,
+    default: false
+  },
+  allowInvitations: {
+    type: Boolean,
+    default: false
+  },
   publish_status: {
     type: String,
     default: "draft"

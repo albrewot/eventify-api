@@ -19,6 +19,7 @@ router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
 router.put("/publish/:id", isAuth, publishEvent);
 router.put("/finish/:id", isAuth, finishEvent);
+router.delete("/delete/:id", isAuth, deleteEvent);
 //pin del mapa
 router.post("/pin/create", isAuth, createPin);
 router.put("/pin/:id/edit", isAuth, editPin);
@@ -142,6 +143,18 @@ async function finishEvent(req, res, next) {
   try {
     const response = await eventService.finishEvent(req.params.id);
     res.json({ message: "Event finished successfully", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function deleteEvent(req, res, next) {
+  try {
+    const response = await eventService.deleteEvent(req.params.id);
+    res.json({
+      message: "Event deleted successfully",
+      data: { eventId: response.id, status: response.status }
+    });
   } catch (err) {
     next(err);
   }

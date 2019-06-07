@@ -176,6 +176,29 @@ class EventService {
     return await event.save();
   }
 
+  async deleteEvent(eventId) {
+    const event = await Event.findById(eventId);
+    if (!event) {
+      throw { type: "not found", message: "Event not found", code: 14 };
+    }
+    if (event.publish_status === "published") {
+      throw {
+        type: "validation",
+        message: "Can't delete a published event, must be on draft or finished"
+      };
+    }
+    if (!event.status) {
+      throw {
+        type: "validation",
+        message: "Event was already deleted"
+      };
+    }
+    Object.assign(event, {
+      status: false
+    });
+    return await event.save();
+  }
+
   async createInvitations(params) {
     const valid = await validator("invitation_create", params);
     if (valid.error) {
