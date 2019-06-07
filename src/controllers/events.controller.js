@@ -17,8 +17,7 @@ router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
 router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
-router.put("/publish/:id", isAuth, publishEvent);
-router.put("/finish/:id", isAuth, finishEvent);
+router.put("/change_status/:id", isAuth, changeEventPublishStatus);
 router.delete("/delete/:id", isAuth, deleteEvent);
 //pin del mapa
 router.post("/pin/create", isAuth, createPin);
@@ -130,19 +129,22 @@ async function editEvent(req, res, next) {
   }
 }
 
-async function publishEvent(req, res, next) {
+async function changeEventPublishStatus(req, res, next) {
   try {
-    const response = await eventService.publishEvent(req.params.id);
-    res.json({ message: "Event published successfully", data: response });
-  } catch (err) {
-    next(err);
-  }
-}
-
-async function finishEvent(req, res, next) {
-  try {
-    const response = await eventService.finishEvent(req.params.id);
-    res.json({ message: "Event finished successfully", data: response });
+    if (!req.body.status) {
+      throw {
+        type: "validation",
+        message: "Status must be supplied"
+      };
+    }
+    const response = await eventService.changeEventPublishStatus(
+      req.params.id,
+      req.body.status
+    );
+    res.json({
+      message: "Event status edited successfully",
+      data: { eventId: response.id, publish_status: response.publish_status }
+    });
   } catch (err) {
     next(err);
   }

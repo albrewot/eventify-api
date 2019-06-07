@@ -125,48 +125,54 @@ class EventService {
     }
   }
 
-  async publishEvent(eventId) {
+  async changeEventPublishStatus(eventId, status) {
     const event = await Event.findById(eventId);
     if (!event)
       throw { type: "not found", message: "Event not found", code: 14 };
 
-    switch (event.publish_status) {
+    switch (status) {
       case "published":
-        throw { type: "validation", message: "Event is already published" };
-      case "finished":
-        throw {
-          type: "validation",
-          message: "Event was finished, can't publish again"
-        };
-      case "draft":
+        if (event.publish_status === "published") {
+          throw { type: "validation", message: "Event is already published" };
+        } else if (event.publish_status === "finished") {
+          throw {
+            type: "validation",
+            message: "Event was finished, can't publish again"
+          };
+        }
         Object.assign(event, {
           publish_status: "published"
         });
         break;
-      default:
-        throw {
-          type: "validation",
-          message: "Invalid event status"
-        };
-    }
-    return await event.save();
-  }
-
-  async finishEvent(eventId) {
-    const event = await Event.findById(eventId);
-    if (!event)
-      throw { type: "not found", message: "Event not found", code: 14 };
-
-    switch (event.publish_status) {
-      case "published":
+      case "finished":
+        if (event.publish_status === "finished") {
+          throw { type: "validation", message: "Event is already finished" };
+        } else if (event.publish_status === "draft") {
+          throw {
+            type: "validation",
+            message: "Event status must be published"
+          };
+        } else if (event.publish_status === "cancelled") {
+          throw {
+            type: "validation",
+            message: "Can't finish a cancelled event"
+          };
+        }
         Object.assign(event, {
           publish_status: "finished"
         });
         break;
-      case "finished":
-        throw { type: "validation", message: "Event is already finished" };
-      case "draft":
-        throw { type: "validation", message: "Event status must be published" };
+      case "cancelled":
+        if (event.publish_status !== "published") {
+          throw {
+            type: "validation",
+            message: "Event must have status published to be cancelled"
+          };
+        }
+        Object.assign(event, {
+          publish_status: "cancelled"
+        });
+        break;
       default:
         throw {
           type: "validation",
