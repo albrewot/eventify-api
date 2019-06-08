@@ -91,6 +91,7 @@ const EventSchema = new Schema({
     type: Boolean,
     default: true
   },
+  pins: [],
   createdAt: {
     type: Date,
     default: Date.now

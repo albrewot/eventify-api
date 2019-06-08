@@ -19,13 +19,22 @@ class EventService {
   }
 
   async getEventById(eventId) {
-    return await Event.findById(eventId)
+    const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("guests")
       .populate("category")
       .populate("type")
       .populate("restriction")
       .populate("modality");
+    if (!event)
+      throw { type: "not found", message: "Event not found", code: 14 };
+    let pins = await Pin.find({ event: eventId });
+    if (!pins || pins.length === 0) {
+      pins = [];
+    }
+    event["pins"] = pins;
+    console.log("evento", event, pins);
+    return event;
   }
 
   async getUserEvents(host) {
