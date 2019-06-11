@@ -61,6 +61,18 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  followers: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  following: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
   chats: [
     {
       type: mongoose.Schema.Types.ObjectId,

@@ -14,7 +14,10 @@ class UserService {
 
   //se trae a un usuario sin hash
   async getById(id) {
-    return await User.findById(id).select("-password");
+    return await User.findById(id)
+      .select("-password")
+      .populate("followers")
+      .populate("following");
   }
 
   //crea un usuario
@@ -264,6 +267,95 @@ class UserService {
         data: id
       };
     }
+  }
+
+  async followUser(followId, userId) {
+    const follow = await User.findById(followId);
+    const user = await User.findById(userId);
+    if (!follow) {
+      throw {
+        type: "not found",
+        message: "User to follow wasnt found"
+      };
+    }
+    if (!user) {
+      throw {
+        type: "not found",
+        message: "Current User wasnt found"
+      };
+    }
+    if (follow.followers.indexOf(userId) > -1) {
+      console.log(userId in follow.followers);
+      throw {
+        type: "validation",
+        message: "User is already following this account"
+      };
+    }
+    follow.followers.push(userId);
+    await follow.save();
+    user.following.push(follow.id);
+    await user.save();
+    return {
+      data: `User: ${userId} added to User: ${follow.id} followers list`
+    };
+  }
+
+  async unfollowUser(followId, userId) {
+    const follow = await User.findById(followId);
+    const user = await User.findById(userId);
+    if (!follow) {
+      throw {
+        type: "not found",
+        message: "User to follow wasnt found"
+      };
+    }
+    if (!user) {
+      throw {
+        type: "not found",
+        message: "Current User wasnt found"
+      };
+    }
+    if (follow.followers.indexOf(userId) > -1) {
+      const index = follow.followers.indexOf(userId);
+      follow.followers.splice(index, 1);
+      await follow.save();
+
+      const userIndex = user.following.indexOf(follow.id);
+      user.following.splice(userIndex, 1);
+      await user.save();
+      return {
+        data: `User: ${userId} removed from User: ${follow.id} followers list`
+      };
+    }
+
+    throw {
+      type: "not found",
+      message: `User is not following ${follow.id}`
+    };
+  }
+
+  async getFollowers(userId) {
+    const user = await User.findById(userId).populate("followers", "-password");
+    console.log(userId, user);
+    if (!user) {
+      throw {
+        type: "not found",
+        message: "User wasnt found"
+      };
+    }
+    console.log(user);
+    return user.followers;
+  }
+
+  async getFollowing(userId) {
+    const user = await User.findById(userId).populate("following", "-password");
+    if (!user) {
+      throw {
+        type: "not found",
+        message: "User wasnt found"
+      };
+    }
+    return user.following;
   }
 }
 

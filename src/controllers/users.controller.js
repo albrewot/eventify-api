@@ -16,6 +16,10 @@ router.put("/avatar/:id", isAuth, changeAvatar);
 router.put("/edit", isAuth, editUser);
 router.put("/change_password", isAuth, changePassword);
 router.put("/invitation/:id/confirm", isAuth, confirmUserInvitation);
+router.put("/follow/:follow", isAuth, followUser);
+router.put("/unfollow/:follow", isAuth, unfollowUser);
+router.get("/followers/:id", isAuth, getFollowers);
+router.get("/following/:id", isAuth, getFollowing);
 
 module.exports = router;
 
@@ -138,6 +142,48 @@ async function confirmUserInvitation(req, res, next) {
       message: "User invitation confirmed successfully",
       data: response
     });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function followUser(req, res, next) {
+  try {
+    const response = await userService.followUser(
+      req.params.follow,
+      req.body.userId
+    );
+    res.json({ message: "User follow is successfull", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function unfollowUser(req, res, next) {
+  try {
+    const response = await userService.unfollowUser(
+      req.params.follow,
+      req.body.userId
+    );
+    res.json({ message: "User unfollow is successfull", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getFollowers(req, res, next) {
+  try {
+    const response = await userService.getFollowers(req.params.id);
+    res.json({ message: "Users following current user", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getFollowing(req, res, next) {
+  try {
+    const response = await userService.getFollowing(req.params.id);
+    res.json({ message: "Users followed by current user", data: response });
   } catch (err) {
     next(err);
   }
