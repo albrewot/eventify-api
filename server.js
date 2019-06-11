@@ -1,18 +1,23 @@
 require("rootpath")();
 require("dotenv").config();
 const express = require("express");
+const app = express();
 const passport = require("passport");
+const server = require("http").Server(app);
+const io = require("socket.io").listen(server);
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const routes = require("./src/routes");
 const path = require("path");
 const errorHandler = require("./src/middlewares/error.middleware");
+const socketManager = require("./src/config/socketManager");
+
+io.on("connection", socket => socketManager(socket));
 
 //Init
 global.rootDir = path.resolve(__dirname);
 console.log(rootDir);
-const app = express();
 
 // Passport Config
 require("./src/config/passport")(passport);
@@ -34,6 +39,6 @@ app.use(errorHandler);
 
 // start server
 const port = process.env.PORT || 4000;
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("Server listening on port " + port);
 });
