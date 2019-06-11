@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const db = require("../config/db");
 const validation = require("../validations/user");
+const { checkRestrictions } = require("../helpers");
 const User = db.User;
 const Event = db.Event;
 const Invitation = db.Invitation;
@@ -157,10 +158,30 @@ class UserService {
   }
 
   async confirmUserInvitation(params, id) {
-    const invitation = await Invitation.findById(id);
+    const invitation = await Invitation.findById(id).populate(
+      "user",
+      "-password"
+    );
     const event = await Event.findById(invitation.event);
-    const { active, status, used } = invitation;
+    const { active, status, used, user } = invitation;
     console.log(invitation);
+    let pass = 0;
+    for (let restriction of event.restrictions) {
+      const result = checkRestrictions(
+        restriction.toObject(),
+        user.genre,
+        user.birthDate
+      );
+      console.log("result", result);
+      pass = pass + result;
+    }
+    console.log("af", pass);
+    if (pass > 0) {
+      throw {
+        type: "validation",
+        message: "User is not allowed to sign up for event due to restrictions"
+      };
+    }
     if (invitation && active) {
       if (status !== "pending" || used) {
         throw {
@@ -172,28 +193,30 @@ class UserService {
         if (event) {
           console.log("hue", event);
           if (event.guests.length > 0) {
+            console.log(event.guests.length);
             for (let guest of event.guests) {
-              console.log("guest id", guest);
-              if (guest === invitation.user) {
+              console.log("itero", guest, invitation.user);
+              if (guest == user.id) {
                 throw {
                   type: "already exist",
                   message: "User already exist in the guest list",
-                  data: invitation
+                  data: event.guests
                 };
+              } else {
+                console.log("before", event.guests, guest);
+                event.guests.push(user.id);
+                console.log(">", event.guests);
               }
-              console.log("before", event.guests, guest);
-              event.guests.push(invitation.user);
-              console.log(">", event.guests);
             }
           } else {
-            event.guests.push(invitation.user);
+            event.guests.push(user.id);
             console.log("<", event.guests);
           }
         } else {
           throw {
             type: "not found",
             message: "event id was not found",
-            data: id
+            data: invitation.event
           };
         }
         switch (params.confirm) {
@@ -210,12 +233,12 @@ class UserService {
           console.log("accepted");
           const newGuestList = await event.save();
           if (newGuestList) {
-            return { guest: id };
+            return { guest: user.id };
           } else {
             throw {
               type: "failed",
               message: "Error while adding guest ot the event guest list",
-              data: id
+              data: user.id
             };
           }
         } else if (confirmedInvitation && params.confirm == "2") {

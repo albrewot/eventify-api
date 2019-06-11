@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Address = require("./Address");
-const Phone = require("./Phone");
-const Pin = require("./Pin");
+const Address = require("./Embebed/Address");
+const Phone = require("./Embebed/Phone");
+const Restriction = require("./Embebed/Restrict");
 
 const EventSchema = new Schema({
   name: {
@@ -24,12 +24,6 @@ const EventSchema = new Schema({
     ref: "User",
     required: [true, "missing host"]
   },
-  guests: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
-    }
-  ],
   country: {
     type: String,
     default: null
@@ -96,6 +90,13 @@ const EventSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  guests: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User"
+    }
+  ],
+  restrictions: [Restriction],
   lastUpdate: {
     type: Date,
     default: Date.now

@@ -1,5 +1,7 @@
 const db = require("../config/db");
+const moment = require("moment");
 const validator = require("../validations/events");
+const { checkRestrictions } = require("../helpers");
 const Event = db.Event;
 const Invitation = db.Invitation;
 const Pin = db.Pin;
@@ -215,6 +217,52 @@ class EventService {
     Object.assign(event, {
       status: false
     });
+    return await event.save();
+  }
+
+  async signUpForEvent(eventId, userId) {
+    const event = await Event.findById(eventId);
+    console.log(event);
+    if (!event) {
+      throw { type: "not found", message: "Event not found", code: 14 };
+    }
+    const user = await User.findById(userId);
+
+    if (!user) throw { type: "not found", message: "User not found", code: 14 };
+    console.log(
+      "validation",
+      event.guests,
+      user.id,
+      user.id == userId,
+      event.guests.indexOf(userId)
+    );
+    if (event.private === true) {
+      throw {
+        type: "validation",
+        message: "Need an invitation to sign up for a private event"
+      };
+    }
+    let pass = 0;
+    for (let restriction of event.restrictions) {
+      const result = checkRestrictions(
+        restriction.toObject(),
+        user.genre,
+        user.birthDate
+      );
+      console.log("result", result);
+      pass = pass + result;
+    }
+    console.log("af", pass);
+    if (pass > 0) {
+      throw {
+        type: "validation",
+        message: "User is not allowed to sign up for event due to restrictions"
+      };
+    }
+    if (event.guests.indexOf(user.id) > -1) {
+      throw { type: "validation", message: "User is already in guest list" };
+    }
+    event.guests.push(user.id);
     return await event.save();
   }
 

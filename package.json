@@ -28,12 +28,14 @@
     "express-fileupload": "^1.1.4",
     "express-session": "^1.15.6",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.24.0",
     "mongodb": "^3.0.10",
     "mongoose": "^5.1.4",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
     "rootpath": "^0.1.2",
+    "socket.io": "^2.2.0",
     "uuid": "^3.3.2"
   }
 }

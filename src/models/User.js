@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const Phone = require("../models/Phone");
-const Address = require("../models/Address");
+const Phone = require("./Embebed/Phone");
+const Address = require("./Embebed/Address");
 
 const UserSchema = new Schema({
   username: {
@@ -61,6 +61,12 @@ const UserSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  chats: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Chat"
+    }
+  ],
   lastUpdate: {
     type: Date,
     default: Date.now

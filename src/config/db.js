@@ -21,5 +21,6 @@ module.exports = {
     Modality: require("../models/EventSelects/Modality"),
     Restriction: require("../models/EventSelects/Restriction"),
     Genre: require("../models/EventSelects/Genre")
-  }
+  },
+  Chat: require("../models/Chat/Chat")
 };

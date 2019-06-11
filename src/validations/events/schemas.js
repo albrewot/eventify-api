@@ -48,7 +48,14 @@ const EventEditSchema = Joi.object().keys({
   city: Joi.string(),
   status: Joi.boolean(),
   private: Joi.boolean(),
-  allowInvitations: Joi.boolean()
+  allowInvitations: Joi.boolean(),
+  restrictions: Joi.array().items(
+    Joi.object().keys({
+      restrictionType: Joi.string(),
+      rules: Joi.array().items(Joi.alternatives(Joi.string(), Joi.number())),
+      restrictTo: Joi.array().items(Joi.string())
+    })
+  )
 });
 
 const InvitationCreateSchema = Joi.object().keys({

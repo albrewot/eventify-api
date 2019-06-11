@@ -7,6 +7,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 
 // Rutas para evento
 router.post("/register", isAuth, register);
+router.put("/signup/:event", isAuth, signUpForEvent);
 //invitaciones
 router.post("/invitation/create", isAuth, createInvitations);
 router.put("/invitation/delete/:id", isAuth, deleteEventInvitation);
@@ -169,6 +170,30 @@ async function deleteEvent(req, res, next) {
     res.json({
       message: "Event deleted successfully",
       data: { eventId: response.id, status: response.status }
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function removeEvent(req, res, next) {
+  try {
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function signUpForEvent(req, res, next) {
+  try {
+    const response = await eventService.signUpForEvent(
+      req.params.event,
+      req.body.userId
+    );
+    console.log(response);
+    res.json({
+      type: "success",
+      message: "User signed up successfully",
+      data: response
     });
   } catch (err) {
     next(err);
