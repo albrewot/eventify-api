@@ -1,43 +1,66 @@
 const chatService = require("../../services/chat.service");
 
-module.exports = socket => {
+module.exports = (socket, io) => {
   console.log("user connected on socket " + socket.id);
+  socket.room = socket.id;
   socket.on("CHAT_MESSAGE", message => {
     console.log(message);
-    socket.broadcast.emit("CHAT_MESSAGE", message);
+    socket.emit("CHAT_MESSAGE", message);
   });
 
-  socket.on("CREATE_CHAT", async members => {
-    console.log(members);
-    const chat = await chatService.createChat(members);
-    console.log("res", chat);
-    if (!chat) {
-      socket.emit(`ERROR-${members[0]}`, {
-        type: "failed chat",
-        message: "Error while creating chat"
-      });
+  socket.on("CREATE_CHAT", async (members, callback) => {
+    const checkChats = await chatService.getUserChats(members[0]);
+    console.log("check", checkChats);
+    let foundChat = null;
+    for (let checkChat of checkChats) {
+      console.log(checkChat.other[0].id, members[1]);
+      if (checkChat.other[0].id == members[1]) {
+        foundChat = checkChat;
+        break;
+      }
     }
-    for (let member of members) {
-      console.log(member);
-      const other = chat.members.filter(members => members.id != member);
-      const parsedChat = chat.toObject();
-      Object.assign(parsedChat, { other });
-      console.log("chatt", parsedChat);
-      socket.emit(`NEW-CHAT-${member}`, parsedChat);
+    console.log("FOUND", foundChat);
+    if (foundChat) {
+      callback(foundChat);
+      return;
+    } else {
+      const chat = await chatService.createChat(members);
+      console.log("res", chat);
+      if (!chat) {
+        socket.emit(`ERROR-${members[0]}`, {
+          type: "failed chat",
+          message: "Error while creating chat"
+        });
+      }
+      for (let member of members) {
+        console.log(member);
+        const other = chat.members.filter(members => members.id != member);
+        const parsedChat = chat.toObject();
+        Object.assign(parsedChat, { other });
+        console.log("chatt", parsedChat);
+        socket.emit(`NEW-CHAT-${member}`, parsedChat);
+      }
     }
   });
 
-  socket.on("JOIN_CHAT", chatId => {
+  socket.on("JOIN_CHAT", async chatId => {
+    socket.leave(socket.room);
+    socket.join(chatId);
     console.log("Join", chatId);
-    console.log(`ROOM-${chatId.toString()}`);
-    socket.join(`ROOM-${chatId.toString()}`);
+    socket.room = chatId;
+    socket.to(chatId).emit(`ROOM_MESSAGE-${chatId}`, "connecto");
+    console.log(`ROOM-${chatId}`);
   });
 
   socket.on("ROOM_MESSAGE", async info => {
     console.log(info);
-    console.log(`ROOM-${info.room.toString()}`);
-    socket
-      .in(`ROOM-${info.room.toString()}`)
-      .emit(`ROOM_MESSAGE-${info.room.toString()}`, info.newMessage);
+    console.log(info.room);
+    console.log(socket.rooms);
+    io.sockets.in(info.room).emit(`ROOM_MESSAGE-${info.room}`, info.newMessage);
+    const updatedChat = await chatService.saveMessages(
+      info.room,
+      info.newMessage
+    );
+    console.log(updatedChat);
   });
 };

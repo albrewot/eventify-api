@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require("../controllers/users.controller");
 const authController = require("../controllers/auth.controller");
 const eventController = require("../controllers/events.controller");
+const chatController = require("../controllers/chat.controller");
 const countryController = require("../controllers/countries.controller");
 const referenceController = require("../controllers/references.controller");
 
@@ -18,6 +19,7 @@ module.exports = app => {
   app.use("/api/events", eventController);
   app.use("/api/references", referenceController);
   app.use("/api/countries", countryController);
+  app.use("/api/chats", chatController);
 
   //Not found
   app.use(router);

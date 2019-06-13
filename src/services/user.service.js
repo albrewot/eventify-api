@@ -17,7 +17,8 @@ class UserService {
     return await User.findById(id)
       .select("-password")
       .populate("followers")
-      .populate("following");
+      .populate("following")
+      .populate("chats");
   }
 
   //crea un usuario

@@ -13,7 +13,7 @@ const path = require("path");
 const errorHandler = require("./src/middlewares/error.middleware");
 const socketManager = require("./src/config/socket/socketManager");
 
-io.on("connection", socket => socketManager(socket));
+io.on("connection", socket => socketManager(socket, io));
 
 //Init
 global.rootDir = path.resolve(__dirname);
