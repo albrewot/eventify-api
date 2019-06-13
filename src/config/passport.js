@@ -15,8 +15,8 @@ module.exports = passport => {
       console.log("1 local strategy");
 
       let user = await User.findOne({ username });
-      if(!user){
-        user = await User.findOne({email:username});
+      if (!user) {
+        user = await User.findOne({ email: username });
       }
       if (!user) {
         done(null, false, {
@@ -24,7 +24,7 @@ module.exports = passport => {
           code: 204
         });
       }
-
+      console.log(user);
       const hash = await bcrypt.compare(password, user.password);
 
       if (hash) {

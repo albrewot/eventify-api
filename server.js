@@ -11,7 +11,7 @@ const fileUpload = require("express-fileupload");
 const routes = require("./src/routes");
 const path = require("path");
 const errorHandler = require("./src/middlewares/error.middleware");
-const socketManager = require("./src/config/socketManager");
+const socketManager = require("./src/config/socket/socketManager");
 
 io.on("connection", socket => socketManager(socket));
 

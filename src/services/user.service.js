@@ -335,7 +335,10 @@ class UserService {
   }
 
   async getFollowers(userId) {
-    const user = await User.findById(userId).populate("followers", "-password");
+    const user = await User.findById(userId).populate(
+      "followers",
+      "_id name lastName avatar username"
+    );
     console.log(userId, user);
     if (!user) {
       throw {
@@ -348,7 +351,10 @@ class UserService {
   }
 
   async getFollowing(userId) {
-    const user = await User.findById(userId).populate("following", "-password");
+    const user = await User.findById(userId).populate(
+      "following",
+      "_id name lastName avatar username"
+    );
     if (!user) {
       throw {
         type: "not found",
