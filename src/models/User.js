@@ -81,6 +81,14 @@ const UserSchema = new Schema({
       ref: "Chat"
     }
   ],
+  first_login: {
+    type: Boolean,
+    default: true
+  },
+  admin: {
+    type: Boolean,
+    default: false
+  },
   lastUpdate: {
     type: Date,
     default: Date.now

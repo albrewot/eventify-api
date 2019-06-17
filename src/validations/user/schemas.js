@@ -32,7 +32,8 @@ const UserEditSchema = Joi.object().keys({
   ),
   country: Joi.string(),
   state: Joi.string(),
-  city: Joi.string()
+  city: Joi.string(),
+  first_login: Joi.boolean()
 });
 
 module.exports = {
