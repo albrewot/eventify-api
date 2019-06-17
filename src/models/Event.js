@@ -25,12 +25,14 @@ const EventSchema = new Schema({
     required: [true, "missing host"]
   },
   country: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Country",
     default: null
     //required: [true, "missing country"]
   },
   state: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "State",
     default: null
     //required: [true, "missing state"]
   },

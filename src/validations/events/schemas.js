@@ -13,7 +13,7 @@ const EventRegisterSchema = Joi.object().keys({
       description: Joi.string()
     })
   ),
-  category: Joi.string().required(),
+  //category: Joi.string().required(),
   type: Joi.string().required(),
   modality: Joi.string().required(),
   country: Joi.string(),
