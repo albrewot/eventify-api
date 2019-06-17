@@ -2,9 +2,13 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ReferenceSchema = new Schema({
+  type: {
+    type: String,
+    required: [true, "missing Reference Type"]
+  },
   name: {
     type: String,
-    required: [true, "missing reference name"],
+    required: [true, "missing Reference name"],
     unique: true
   },
   parent: {

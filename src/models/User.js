@@ -45,12 +45,14 @@ const UserSchema = new Schema({
   },
   tlf: [Phone],
   country: {
-    type: String,
-    default: ""
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Country",
+    default: null
   },
   state: {
-    type: String,
-    default: ""
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "State",
+    default: null
   },
   city: {
     type: String,

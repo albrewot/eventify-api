@@ -34,9 +34,10 @@ class EventService {
     if (!pins || pins.length === 0) {
       pins = [];
     }
-    event["pins"] = pins;
-    console.log("evento", event, pins);
-    return event;
+    let parsedEvent = event.toObject();
+    Object.assign(parsedEvent, { pins });
+    console.log("evento", parsedEvent, pins);
+    return parsedEvent;
   }
 
   async getUserEvents(host) {

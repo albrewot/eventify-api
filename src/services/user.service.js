@@ -295,9 +295,14 @@ class UserService {
     follow.followers.push(userId);
     await follow.save();
     user.following.push(follow.id);
-    await user.save();
+    let updatedUser = await user.save();
+    updatedUser = await updatedUser
+      .populate("followers", "_id name lastName avatar username")
+      .populate("following", "_id name lastName avatar username")
+      .execPopulate();
     return {
-      data: `User: ${userId} added to User: ${follow.id} followers list`
+      log: `User: ${userId} added to User: ${follow.id} followers list`,
+      user: updatedUser
     };
   }
 
@@ -323,9 +328,14 @@ class UserService {
 
       const userIndex = user.following.indexOf(follow.id);
       user.following.splice(userIndex, 1);
-      await user.save();
+      let updatedUser = await user.save();
+      updatedUser = await updatedUser
+        .populate("followers", "_id name lastName avatar username")
+        .populate("following", "_id name lastName avatar username")
+        .execPopulate();
       return {
-        data: `User: ${userId} removed from User: ${follow.id} followers list`
+        log: `User: ${userId} removed from User: ${follow.id} followers list`,
+        user: updatedUser
       };
     }
 

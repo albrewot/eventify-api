@@ -1,71 +1,51 @@
 const db = require("../config/db");
-const Reference = db.Reference;
 const References = db.References;
 
 class ReferenceService {
-  async create(referenceParam) {
+  async createReference(referenceParams) {
     try {
-      for (let ref of referenceParam) {
-        if (await Reference.findOne({ name: ref.name })) {
-          throw {
-            type: "taken",
-            message: `Reference [${ref.name}] already exists`,
-            code: 209
-          };
+      let errors = [];
+      let errorMessage = "";
+      for (let refer of referenceParams) {
+        if (!refer.parent) {
+          refer.parent = null;
+        }
+        const reference = await References.Reference.find({
+          name: refer.name,
+          parent: refer.parent
+        });
+        console.log(reference);
+        if (reference.length > 0) {
+          errors.push(refer.name);
         }
       }
-
-      const newRef = await Reference.create(referenceParam);
-      if (newRef) {
-        return newRef;
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async getReferences() {
-    try {
-      const references = await Reference.find({});
-      console.log("reference");
-      if (!references || references.length <= 0) {
-        console.log("reference err");
+      if (errors.length > 0) {
+        for (let error of errors) {
+          errorMessage = errorMessage + `${error},`;
+        }
+        errorMessage = errorMessage.slice(0, errorMessage.length - 1);
         throw {
-          type: "not found",
-          message: `There is no references to retrieve`,
-          code: 210
+          type: "already exist",
+          message: `The following references already exists [${errorMessage}]`
         };
       }
-      console.log("reference in");
-      return references;
+      const newReference = await References.Reference.create(referenceParams);
+      return newReference;
     } catch (err) {
       throw err;
     }
   }
 
-  async getReferencesByParent(referenceParams) {
-    const { id } = referenceParams;
-    if (!id) {
-      throw { type: "missing", message: `No id supplied`, code: 211 };
-    }
+  async getReferences(type, parent = null) {
     try {
-      const references = await Reference.find({ parent: id }).populate(
-        "parent"
+      const references = await References.Reference.find({ type, parent }).sort(
+        "asc"
       );
-      if (!references || references.length <= 0) {
-        throw { type: "not found", message: "No reference found", code: 212 };
-      }
-      return references;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async getParents() {
-    try {
-      const references = await Reference.find({ parent: null });
-      if (!references || references.length <= 0) {
-        throw { type: "not found", message: "No reference found", code: 212 };
+      if (!references || references.length == 0) {
+        throw {
+          type: "not found",
+          message: `There is no references with type: [${type}]`
+        };
       }
       return references;
     } catch (err) {
@@ -95,21 +75,7 @@ class ReferenceService {
       throw err;
     }
   }
-  async getRestriction() {
-    try {
-      const references = await References.Restriction.find({});
-      if (!references || references.length <= 0) {
-        throw {
-          type: "not found",
-          message: "No restrictions found",
-          code: 212
-        };
-      }
-      return references;
-    } catch (err) {
-      throw err;
-    }
-  }
+
   async getModality() {
     try {
       const references = await References.Modality.find({});
@@ -180,29 +146,7 @@ class ReferenceService {
       throw err;
     }
   }
-  async createRestriction(params) {
-    try {
-      if (params.length == 0 || !params) {
-        throw { message: "no restrictions supplied" };
-      }
-      for (let ref of params) {
-        if (await References.Restriction.findOne({ name: ref.name })) {
-          throw {
-            type: "taken",
-            message: `Restriction [${ref.name}] already exists`,
-            code: 209
-          };
-        }
-      }
 
-      const newRef = await References.Restriction.create(params);
-      if (newRef) {
-        return newRef;
-      }
-    } catch (err) {
-      throw err;
-    }
-  }
   async createModality(params) {
     try {
       if (params.length == 0 || !params) {

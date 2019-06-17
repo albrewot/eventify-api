@@ -15,7 +15,6 @@ const EventRegisterSchema = Joi.object().keys({
   ),
   category: Joi.string().required(),
   type: Joi.string().required(),
-  restriction: Joi.string().required(),
   modality: Joi.string().required(),
   country: Joi.string(),
   state: Joi.string(),
@@ -30,7 +29,6 @@ const EventEditSchema = Joi.object().keys({
   finish_date: Joi.date().min(Joi.ref("start_date")),
   category: Joi.string(),
   type: Joi.string(),
-  restriction: Joi.string(),
   modality: Joi.string(),
   tlf: Joi.array().items(
     Joi.object().keys({

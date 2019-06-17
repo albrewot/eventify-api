@@ -43,6 +43,10 @@ module.exports = (socket, io) => {
     }
   });
 
+  socket.on("UPDATE_CHATS", userId => {
+    console.log("User" + userId);
+  });
+
   socket.on("JOIN_CHAT", async chatId => {
     socket.leave(socket.room);
     socket.join(chatId);

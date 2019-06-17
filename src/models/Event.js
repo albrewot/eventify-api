@@ -51,11 +51,6 @@ const EventSchema = new Schema({
     ref: "Type",
     required: [true, "missing type"]
   },
-  restriction: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Restriction",
-    required: [true, "missing restriction"]
-  },
   modality: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Modality",
@@ -85,7 +80,6 @@ const EventSchema = new Schema({
     type: Boolean,
     default: true
   },
-  pins: [],
   createdAt: {
     type: Date,
     default: Date.now
