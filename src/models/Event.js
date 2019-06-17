@@ -43,11 +43,11 @@ const EventSchema = new Schema({
   },
   address: [Address],
   tlf: [Phone],
-  category: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Reference",
-    required: [true, "missing category"]
-  },
+  // category: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Reference",
+  //   required: [true, "missing category"]
+  // },
   type: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Reference",
