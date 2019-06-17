@@ -297,8 +297,8 @@ class UserService {
     user.following.push(follow.id);
     let updatedUser = await user.save();
     updatedUser = await updatedUser
-      .populate("followers", "_id name lastName avatar username")
-      .populate("following", "_id name lastName avatar username")
+      .populate("followers", "_id name lastName avatar username followers")
+      .populate("following", "_id name lastName avatar username following")
       .execPopulate();
     return {
       log: `User: ${userId} added to User: ${follow.id} followers list`,
@@ -330,8 +330,14 @@ class UserService {
       user.following.splice(userIndex, 1);
       let updatedUser = await user.save();
       updatedUser = await updatedUser
-        .populate("followers", "_id name lastName avatar username")
-        .populate("following", "_id name lastName avatar username")
+        .populate(
+          "followers",
+          "_id name lastName avatar username followers following"
+        )
+        .populate(
+          "following",
+          "_id name lastName avatar username followers following"
+        )
         .execPopulate();
       return {
         log: `User: ${userId} removed from User: ${follow.id} followers list`,

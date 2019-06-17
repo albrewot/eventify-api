@@ -10,7 +10,7 @@ const RestrictSchema = new Schema({
   restrictTo: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Genre"
+      ref: "Reference"
     }
   ]
 });

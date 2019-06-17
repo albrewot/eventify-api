@@ -28,7 +28,7 @@ const UserSchema = new Schema({
   },
   genre: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Genre",
+    ref: "Reference",
     default: null
   },
   aboutMe: {

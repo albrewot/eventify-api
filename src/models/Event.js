@@ -43,17 +43,17 @@ const EventSchema = new Schema({
   tlf: [Phone],
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Category",
+    ref: "Reference",
     required: [true, "missing category"]
   },
   type: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Type",
+    ref: "Reference",
     required: [true, "missing type"]
   },
   modality: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Modality",
+    ref: "Reference",
     required: [true, "missing modality"]
   },
   start_date: {
