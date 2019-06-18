@@ -239,7 +239,7 @@ class EventService {
     const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("type")
-      .populzate("country")
+      .populate("country")
       .populate("modality");
     console.log(event, userId);
     if (!event) {
