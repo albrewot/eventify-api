@@ -99,7 +99,12 @@ class UserService {
     }
 
     Object.assign(user, valid);
-    const editedUser = await user.save();
+    let editedUser = await user.save();
+    editedUser = await editedUser
+      .populate("followers")
+      .populate("following")
+      .populate("chats")
+      .execPopulate();
     const { password, ...editted } = editedUser.toObject();
     return editted;
   }
