@@ -236,7 +236,11 @@ class EventService {
   }
 
   async signUpForEvent(eventId, userId) {
-    const event = await Event.findById(eventId).populate("host", "-password");
+    const event = await Event.findById(eventId)
+      .populate("host", "-password")
+      .populate("type")
+      .populzate("country")
+      .populate("modality");
     console.log(event, userId);
     if (!event) {
       throw { type: "not found", message: "Event not found", code: 14 };
