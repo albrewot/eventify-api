@@ -74,6 +74,10 @@ const EventSchema = new Schema({
     type: Boolean,
     default: false
   },
+  showLocation: {
+    type: Boolean,
+    default: true
+  },
   publish_status: {
     type: String,
     default: "draft"

@@ -9,6 +9,7 @@ module.exports = (socket, io) => {
   });
 
   socket.on("CREATE_CHAT", async (members, callback) => {
+    console.log("holis");
     const checkChats = await chatService.getUserChats(members[0]);
     console.log("check", checkChats);
     let foundChat = null;
@@ -43,8 +44,18 @@ module.exports = (socket, io) => {
     }
   });
 
-  socket.on("UPDATE_CHATS", userId => {
-    console.log("User" + userId);
+  socket.on("RETRIEVE_CHATS", async userId => {
+    console.log("RETRIEVE_CHAT", userId);
+    const chats = await chatService.getUserChats(userId);
+    console.log("CHAT", chats);
+    socket.emit("UPDATE_CHATS", chats);
+  });
+
+  socket.on("RETRIEVE_MESSAGES", async chatId => {
+    console.log("RETRIEVE_", chatId);
+    const chat = await chatService.getChatById(chatId);
+    console.log("CHAT MESSAGE", chat);
+    socket.emit("UPDATE_MESSAGES", chat);
   });
 
   socket.on("JOIN_CHAT", async chatId => {

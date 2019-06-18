@@ -168,6 +168,7 @@ class UserService {
     );
     const event = await Event.findById(invitation.event);
     const { active, status, used, user } = invitation;
+    const eventUser = await User.findById(user.id);
     console.log(invitation);
     let pass = 0;
     for (let restriction of event.restrictions) {
@@ -236,6 +237,10 @@ class UserService {
         if (confirmedInvitation && params.confirm == "1") {
           console.log("accepted");
           const newGuestList = await event.save();
+
+          eventUser.event_signups.push(event.id);
+          await eventUser.save();
+
           if (newGuestList) {
             return { guest: user.id };
           } else {
@@ -268,6 +273,31 @@ class UserService {
         data: id
       };
     }
+  }
+
+  async leaveFromEvent(eventId, userId) {
+    const event = await Event.findById(eventId);
+    const user = await User.findById(userId);
+    if (!event) {
+      throw {
+        type: "not found",
+        message: "event id was not found",
+        data: eventId
+      };
+    }
+    if (!user) {
+      throw { type: "not found", message: "User not found", code: 14 };
+    }
+    const userIndex = event.guests.indexOf(userId);
+    if (userIndex == -1) {
+      throw {
+        type: "not found",
+        message: "User not found in event guest list",
+        code: 14
+      };
+    }
+    event.guests.splice(userIndex, 1);
+    return await event.save();
   }
 
   async followUser(followId, userId) {

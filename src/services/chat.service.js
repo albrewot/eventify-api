@@ -57,6 +57,18 @@ class chatService {
     }
   }
 
+  async getChatById(chatId) {
+    try {
+      const chat = await Chat.findById(chatId);
+      if (!chat || chat.length === 0) {
+        throw { type: "not found", message: "Chat was not found" };
+      }
+      return chat;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async getUserChats(userId) {
     try {
       if (!userId) {

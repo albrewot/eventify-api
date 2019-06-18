@@ -81,6 +81,12 @@ const UserSchema = new Schema({
       ref: "Chat"
     }
   ],
+  event_signups: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Event"
+    }
+  ],
   first_login: {
     type: Boolean,
     default: true

@@ -264,7 +264,48 @@ class EventService {
       throw { type: "validation", message: "User is already in guest list" };
     }
     event.guests.push(user.id);
+    user.event_signups.push(event.id);
+    await user.save();
+
     return await event.save();
+  }
+
+  async leaveFromEvent(eventId, userId) {
+    const event = await Event.findById(eventId);
+    const user = await User.findById(userId);
+    if (!event) {
+      throw {
+        type: "not found",
+        message: `event was not found`
+      };
+    }
+    if (!user) {
+      throw {
+        type: "not found",
+        message: `user was not found`
+      };
+    }
+    let userIndex = event.guests.indexOf(userId);
+    let eventIndex = user.event_signups.indexOf(eventId);
+    if (userIndex > -1) {
+      event.guests.splice(userIndex, 1);
+      await event.save();
+      if (eventIndex > -1) {
+        user.event_signups.splice(eventIndex, 1);
+        await user.save();
+      } else {
+        throw {
+          type: "not found",
+          message: `event was not found in signed up list`
+        };
+      }
+    } else {
+      throw {
+        type: "not found",
+        message: `user was not found in guest list`
+      };
+    }
+    return event;
   }
 
   async createInvitations(params) {
@@ -424,7 +465,6 @@ class EventService {
     if (!deleted) {
       throw { type: "query status", message: "pin was not deleted" };
     }
-
     return deleted;
   }
 }
