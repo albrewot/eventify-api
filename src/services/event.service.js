@@ -24,9 +24,9 @@ class EventService {
     const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("guests")
-      .populate("category")
+
       .populate("type")
-      .populate("restriction")
+
       .populate("modality");
     if (!event)
       throw { type: "not found", message: "Event not found", code: 14 };
@@ -52,9 +52,9 @@ class EventService {
     const events = await Event.find({ host })
       .populate("host", "-password")
       .populate("guests")
-      .populate("category")
+
       .populate("type")
-      .populate("restriction")
+
       .populate("modality");
     console.log(events);
     if (!events || events.length == 0) {
@@ -77,23 +77,39 @@ class EventService {
     } else if (query && !query.page) {
       throw {
         type: "wrong qs",
-        message: "Invalid Query String, must be page"
+        message: "Invalid Query String, must have a page query"
       };
     }
-    const events = await Event.find({ publish_status: "published" })
+    let queryBuild = { publish_status: "published" };
+    if (query.type) {
+      Object.assign(queryBuild, { type: query.type });
+    }
+    if (query.modality) {
+      Object.assign(queryBuild, { modality: query.modality });
+    }
+    if (query.country) {
+      Object.assign(queryBuild, { country: query.country });
+    }
+    if (query.state) {
+      Object.assign(queryBuild, { state: query.state });
+    }
+    if (query.name) {
+      Object.assign(queryBuild, { name: new RegExp(query.name, "i") });
+    }
+    console.log(queryBuild);
+    const events = await Event.find(queryBuild)
       .populate("host", "-password")
       .populate("guests")
-      .populate("category")
       .populate("type")
-      .populate("restriction")
       .populate("modality")
+      .populate("country", "name")
       .skip(perPage * pagination)
       .limit(perPage);
     console.log(events);
     if (!events || events.length == 0) {
       throw {
         type: "not found",
-        message: "There is no published events",
+        message: "There is no published events with supplied parameters",
         page: pagination + 1,
         code: 117
       };
