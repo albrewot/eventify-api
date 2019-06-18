@@ -81,19 +81,19 @@ class EventService {
       };
     }
     let queryBuild = { publish_status: "published" };
-    if (query.type) {
+    if (query.type && query.type != "null") {
       Object.assign(queryBuild, { type: query.type });
     }
-    if (query.modality) {
+    if (query.modality && query.modality != "null") {
       Object.assign(queryBuild, { modality: query.modality });
     }
-    if (query.country) {
+    if (query.country && query.country != "null") {
       Object.assign(queryBuild, { country: query.country });
     }
-    if (query.state) {
+    if (query.state && query.state != "null") {
       Object.assign(queryBuild, { state: query.state });
     }
-    if (query.name) {
+    if (query.name && query.name != "null") {
       Object.assign(queryBuild, { name: new RegExp(query.name, "i") });
     }
     console.log(queryBuild);
@@ -206,11 +206,9 @@ class EventService {
     if (!event)
       throw { type: "not found", message: "Event not found", code: 14 };
     const { _id, createdAt, lastUpdate, ...newCopy } = event.toObject();
-    Object.assign(event, {
-      publish_status: "draft",
-      guests: []
-    });
-    console.log(newCopy);
+    newCopy.publish_status = "draft";
+    newCopy.guests = [];
+    console.log("wdiauwhbf", newCopy);
     return await Event.create(newCopy);
   }
 
@@ -483,6 +481,8 @@ class EventService {
     }
     return deleted;
   }
+
+  async eventSingleStatistics(eventId) {}
 }
 
 module.exports = new EventService();
