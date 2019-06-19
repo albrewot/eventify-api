@@ -239,6 +239,7 @@ class EventService {
     const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("type")
+      .populate("guests")
       .populate("country", "name")
       .populate("modality");
     console.log(event, userId);
@@ -298,6 +299,7 @@ class EventService {
     const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("type")
+      .populate("guests")
       .populate("country", "name")
       .populate("modality");
     const user = await User.findById(userId);
