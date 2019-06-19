@@ -19,7 +19,12 @@ class UserService {
       .populate("country")
       .populate("followers")
       .populate("following")
-      .populate("chats");
+      .populate("chats")
+      .populate({
+        path: "event_signups",
+        select: "id _id name image country city type",
+        populate: { path: "type country", select: "name" }
+      });
   }
 
   //crea un usuario
@@ -105,6 +110,11 @@ class UserService {
       .populate("followers")
       .populate("following")
       .populate("chats")
+      .populate({
+        path: "event_signups",
+        select: "id _id name image country city type",
+        populate: { path: "type country", select: "name" }
+      })
       .execPopulate();
     const { password, ...editted } = editedUser.toObject();
     return editted;
