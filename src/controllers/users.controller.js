@@ -11,6 +11,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 router.post("/register", register);
 router.get("/", isAuth, getAll);
 router.get("/:id", isAuth, getById);
+router.get("/find/user", isAuth, searchUser);
 router.get("/invitation/:id", isAuth, getUserInvitations);
 router.put("/avatar/:id", isAuth, changeAvatar);
 router.put("/edit", isAuth, editUser);
@@ -184,6 +185,18 @@ async function getFollowing(req, res, next) {
   try {
     const response = await userService.getFollowing(req.params.id);
     res.json({ message: "Users followed by current user", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function searchUser(req, res, next) {
+  try {
+    if (!req.query || !req.query.name) {
+      throw { type: "invalid qs", message: "must provide name query string" };
+    }
+    const response = await userService.searchUser(req.query.name);
+    res.json({ type: "success", data: response });
   } catch (err) {
     next(err);
   }

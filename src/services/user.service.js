@@ -16,6 +16,7 @@ class UserService {
   async getById(id) {
     return await User.findById(id)
       .select("-password")
+      .populate("country")
       .populate("followers")
       .populate("following")
       .populate("chats");
@@ -414,6 +415,23 @@ class UserService {
       };
     }
     return user.following;
+  }
+
+  async searchUser(query) {
+    const users = await User.find({
+      $or: [
+        { name: new RegExp(query, "i") },
+        { email: new RegExp(query, "i") },
+        { username: new RegExp(query, "i") }
+      ]
+    }).select(" _id id name lastName username avatar email");
+    if (!users || users.length == 0) {
+      throw {
+        type: "not found",
+        message: `users with [${query}] were not found`
+      };
+    }
+    return users;
   }
 }
 
