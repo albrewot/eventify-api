@@ -284,13 +284,14 @@ class EventService {
     event.guests.push(user.id);
     user.event_signups.push(event.id);
     await user.save();
+    await event.save();
     let pins = await Pin.find({ event: event.id });
     if (!pins || pins.length === 0) {
       pins = [];
     }
     let parsedEvent = event.toObject();
     Object.assign(parsedEvent, { pins });
-    return await event.save();
+    return parsedEvent;
   }
 
   async leaveFromEvent(eventId, userId) {
