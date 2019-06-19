@@ -239,7 +239,7 @@ class EventService {
     const event = await Event.findById(eventId)
       .populate("host", "-password")
       .populate("type")
-      .populate("country")
+      .populate("country", "name")
       .populate("modality");
     console.log(event, userId);
     if (!event) {
@@ -284,13 +284,23 @@ class EventService {
     event.guests.push(user.id);
     user.event_signups.push(event.id);
     await user.save();
-
+    let pins = await Pin.find({ event: event.id });
+    if (!pins || pins.length === 0) {
+      pins = [];
+    }
+    let parsedEvent = event.toObject();
+    Object.assign(parsedEvent, { pins });
     return await event.save();
   }
 
   async leaveFromEvent(eventId, userId) {
-    const event = await Event.findById(eventId);
+    const event = await Event.findById(eventId)
+      .populate("host", "-password")
+      .populate("type")
+      .populate("country", "name")
+      .populate("modality");
     const user = await User.findById(userId);
+    console.log(eventId, userId);
     if (!event) {
       throw {
         type: "not found",
@@ -303,10 +313,13 @@ class EventService {
         message: `user was not found`
       };
     }
+    console.log(event.guests);
     let userIndex = event.guests.indexOf(userId);
+    console.log(userIndex);
     let eventIndex = user.event_signups.indexOf(eventId);
     if (userIndex > -1) {
       event.guests.splice(userIndex, 1);
+      console.log("guests", event.guests);
       await event.save();
       if (eventIndex > -1) {
         user.event_signups.splice(eventIndex, 1);
@@ -323,7 +336,13 @@ class EventService {
         message: `user was not found in guest list`
       };
     }
-    return event;
+    let pins = await Pin.find({ event: event.id });
+    if (!pins || pins.length === 0) {
+      pins = [];
+    }
+    let parsedEvent = event.toObject();
+    Object.assign(parsedEvent, { pins });
+    return parsedEvent;
   }
 
   async createInvitations(params) {
