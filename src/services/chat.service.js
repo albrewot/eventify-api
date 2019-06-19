@@ -30,7 +30,7 @@ class chatService {
       }
       let chat = await Chat.create({ members });
       chat = await chat
-        .populate("members", "id name lastName avatar")
+        .populate("members", "id name lastName avatar username")
         .execPopulate();
       return chat;
     } catch (err) {
@@ -83,7 +83,7 @@ class chatService {
         members: {
           $in: [user.id]
         }
-      }).populate("members", "id name lastName avatar");
+      }).populate("members", "id name lastName avatar username");
       console.log("user Chats", userChats);
       let parsedUserChats = [];
       for (let userChat of userChats) {
