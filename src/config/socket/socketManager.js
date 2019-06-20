@@ -1,4 +1,5 @@
 const chatService = require("../../services/chat.service");
+const userService = require("../../services/user.service");
 
 module.exports = (socket, io) => {
   console.log("user connected on socket " + socket.id);
@@ -55,7 +56,7 @@ module.exports = (socket, io) => {
     console.log("RETRIEVE_", chatId);
     const chat = await chatService.getChatById(chatId);
     console.log("CHAT MESSAGE", chat);
-    socket.emit("UPDATE_MESSAGES", chat);
+    socket.emit(`UPDATE_MESSAGES-${chatId}`, chat);
   });
 
   socket.on("JOIN_CHAT", async chatId => {
@@ -77,5 +78,21 @@ module.exports = (socket, io) => {
       info.newMessage
     );
     console.log(updatedChat);
+  });
+
+  socket.on("FOLLOW_USER", async (userId, followId) => {
+    try {
+      console.log(userId, followId);
+      const follow = await userService.followUser(followId, userId);
+      let following = null;
+      if (follow) {
+        following = await userService.getFollowing(userId);
+      }
+      if (following) {
+        socket.emit("UPDATE_FOLLOWING", following);
+      }
+    } catch (err) {
+      socket.emit("UPDATE_FOLLOWING", err);
+    }
   });
 };

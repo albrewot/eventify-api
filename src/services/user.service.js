@@ -166,7 +166,8 @@ class UserService {
   async getUserInvitations(id) {
     const invitations = await Invitation.find({ user: id })
       .where("active")
-      .equals(true);
+      .equals(true)
+      .populate("user");
     if (invitations) {
       return invitations;
     } else {
@@ -258,7 +259,7 @@ class UserService {
           await eventUser.save();
 
           if (newGuestList) {
-            return { guest: user.id };
+            return { guest: user.id, data: invitation };
           } else {
             throw {
               type: "failed",
