@@ -1,5 +1,6 @@
 const db = require("../config/db");
 const moment = require("moment");
+const mongoose = require("mongoose");
 const validator = require("../validations/events");
 const { checkRestrictions } = require("../helpers");
 const Event = db.Event;
@@ -42,7 +43,7 @@ class StatisticsService {
         genderCount.push(tempObj);
       }
     }
-    ageAvg = ageSum / guestNumber;
+    ageAvg = Math.round(ageSum / guestNumber);
     for (let gender of genderCount) {
       const percentage = (gender.count * 100) / guestNumber;
       Object.assign(gender, { percentage });
@@ -50,6 +51,24 @@ class StatisticsService {
 
     Object.assign(stats, { genderCount, ageAvg });
     return { event, stats };
+  }
+
+  async getUserEventsStats(host) {
+    const events = await Event.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "guests",
+          foreignField: "_id",
+          as: "guests_pop"
+        }
+      },
+      { $match: { host: new mongoose.Types.ObjectId(host) } }
+    ]);
+    const e = await Event.find({ host });
+    console.log(events);
+    console.log("find ho", e);
+    return events;
   }
 }
 

@@ -169,7 +169,8 @@ class UserService {
     const invitations = await Invitation.find({ user: id })
       .where("active")
       .equals(true)
-      .populate("user");
+      .populate("user")
+      .populate("event", "name", "image");
     if (invitations) {
       return invitations;
     } else {
