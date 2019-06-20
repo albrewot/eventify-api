@@ -193,21 +193,24 @@ class UserService {
     const eventUser = await User.findById(user.id);
     console.log(invitation);
     let pass = 0;
-    for (let restriction of event.restrictions) {
-      const result = checkRestrictions(
-        restriction.toObject(),
-        user.genre,
-        user.birthDate
-      );
-      console.log("result", result);
-      pass = pass + result;
-    }
-    console.log("af", pass);
-    if (pass > 0) {
-      throw {
-        type: "validation",
-        message: "User is not allowed to sign up for event due to restrictions"
-      };
+    if (params.confirm === "1") {
+      for (let restriction of event.restrictions) {
+        const result = checkRestrictions(
+          restriction.toObject(),
+          user.genre,
+          user.birthDate
+        );
+        console.log("result", result);
+        pass = pass + result;
+      }
+      console.log("af", pass);
+      if (pass > 0) {
+        throw {
+          type: "validation",
+          message:
+            "User is not allowed to sign up for event due to restrictions"
+        };
+      }
     }
     if (invitation && active) {
       if (status !== "pending" || used) {

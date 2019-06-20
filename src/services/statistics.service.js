@@ -63,28 +63,27 @@ class StatisticsService {
           from: "users",
           localField: "guests",
           foreignField: "_id",
-          as: "guests_pop",
-          pipeline: [
-            {
-              $lookup: {
-                from: "references",
-                localField: "genre",
-                foreignField: "_id",
-                as: "genre_pop"
-              }
-            }
-          ]
+          as: "guests"
         }
       },
+      {
+        $lookup: {
+          from: "references",
+          localField: "guests.genre",
+          foreignField: "_id",
+          as: "guests.genre"
+        }
+      },
+      // { $unwind: "$guest_pop" },
       { $match: { host: new mongoose.Types.ObjectId(host) } }
     ]);
-
+    console.log(events);
     for (let event of events) {
       let eventAgeSum = 0;
       const eventGuest = event.guests.length;
       guestSum = guestSum + eventGuest;
       let genderCount = [];
-      for (let guest of event.guests_pop) {
+      for (let guest of event.guests) {
         let birthday = moment(guest.birthDate);
         let age = moment().diff(birthday, "years");
         eventAgeSum = eventAgeSum + age;
