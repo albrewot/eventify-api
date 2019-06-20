@@ -225,7 +225,7 @@ class UserService {
           if (event.guests.length > 0) {
             console.log(event.guests.length);
             for (let guest of event.guests) {
-              console.log("itero", guest, invitation.user);
+              console.log("itero", guest);
               if (guest == user.id) {
                 throw {
                   type: "already exist",
@@ -236,6 +236,7 @@ class UserService {
                 console.log("before", event.guests, guest);
                 event.guests.push(user.id);
                 console.log(">", event.guests);
+                break;
               }
             }
           } else {
