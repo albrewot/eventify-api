@@ -56,26 +56,63 @@ class StatisticsService {
   async getUserEventsStats(host) {
     let stats = {};
     let guestSum = 0;
+    let totalGenderCount = [];
     const events = await Event.aggregate([
       {
         $lookup: {
           from: "users",
           localField: "guests",
           foreignField: "_id",
-          as: "guests_pop"
+          as: "guests_pop",
+          pipeline: [
+            {
+              $lookup: {
+                from: "references",
+                localField: "genre",
+                foreignField: "_id",
+                as: "genre_pop"
+              }
+            }
+          ]
         }
       },
       { $match: { host: new mongoose.Types.ObjectId(host) } }
     ]);
 
     for (let event of events) {
+      let eventAgeSum = 0;
       const eventGuest = event.guests.length;
       guestSum = guestSum + eventGuest;
-    }
+      let genderCount = [];
+      for (let guest of event.guests_pop) {
+        let birthday = moment(guest.birthDate);
+        let age = moment().diff(birthday, "years");
+        eventAgeSum = eventAgeSum + age;
+        let entryFound = false;
+        let tempObj = {
+          name: guest.genre.name,
+          count: 1
+        };
+        for (let genre of genderCount) {
+          if (genre.name === tempObj.name) {
+            genre.count++;
+            entryFound = true;
+            break;
+          }
+        }
 
+        if (!entryFound) {
+          genderCount.push(tempObj);
+        }
+      }
+      if (genderCount.length > 0) {
+        totalGenderCount.push(genderCount);
+      }
+    }
     const eventNum = events.length;
-    Object.assign(stats, { eventNum });
-    return { stats };
+    const avgGuest = Math.round(guestSum / eventNum);
+    Object.assign(stats, { eventNum, avgGuest, totalGenderCount });
+    return { events, stats };
   }
 }
 
