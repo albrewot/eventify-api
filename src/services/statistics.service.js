@@ -56,7 +56,7 @@ class StatisticsService {
   async getUserEventsStats(host) {
     let stats = {};
     let guestSum = 0;
-    let totalGenderCount = [];
+    let ageSum = 0;
     const events = await Event.aggregate([
       {
         $lookup: {
@@ -66,15 +66,6 @@ class StatisticsService {
           as: "guests"
         }
       },
-      {
-        $lookup: {
-          from: "references",
-          localField: "guests.genre",
-          foreignField: "_id",
-          as: "guests.genre"
-        }
-      },
-      // { $unwind: "$guest_pop" },
       { $match: { host: new mongoose.Types.ObjectId(host) } }
     ]);
     console.log(events);
@@ -82,36 +73,51 @@ class StatisticsService {
       let eventAgeSum = 0;
       const eventGuest = event.guests.length;
       guestSum = guestSum + eventGuest;
-      let genderCount = [];
       for (let guest of event.guests) {
         let birthday = moment(guest.birthDate);
         let age = moment().diff(birthday, "years");
         eventAgeSum = eventAgeSum + age;
-        let entryFound = false;
-        let tempObj = {
-          name: guest.genre.name,
-          count: 1
-        };
-        for (let genre of genderCount) {
-          if (genre.name === tempObj.name) {
-            genre.count++;
-            entryFound = true;
-            break;
-          }
-        }
-
-        if (!entryFound) {
-          genderCount.push(tempObj);
-        }
       }
-      if (genderCount.length > 0) {
-        totalGenderCount.push(genderCount);
-      }
+      ageSum = ageSum + eventAgeSum;
     }
     const eventNum = events.length;
     const avgGuest = Math.round(guestSum / eventNum);
-    Object.assign(stats, { eventNum, avgGuest, totalGenderCount });
-    return { events, stats };
+    const avgAge = Math.round(ageSum / guestSum);
+    Object.assign(stats, { eventNum, avgGuest, avgAge });
+    return { stats };
+  }
+
+  async getAdminEventsStats() {
+    let stats = {};
+    let guestSum = 0;
+    let ageSum = 0;
+    const events = await Event.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "guests",
+          foreignField: "_id",
+          as: "guests"
+        }
+      }
+    ]);
+    console.log(events);
+    for (let event of events) {
+      let eventAgeSum = 0;
+      const eventGuest = event.guests.length;
+      guestSum = guestSum + eventGuest;
+      for (let guest of event.guests) {
+        let birthday = moment(guest.birthDate);
+        let age = moment().diff(birthday, "years");
+        eventAgeSum = eventAgeSum + age;
+      }
+      ageSum = ageSum + eventAgeSum;
+    }
+    const eventNum = events.length;
+    const avgGuest = Math.round(guestSum / eventNum);
+    const avgAge = Math.round(ageSum / guestSum);
+    Object.assign(stats, { eventNum, avgGuest, avgAge });
+    return { stats };
   }
 }
 

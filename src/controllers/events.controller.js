@@ -17,6 +17,7 @@ router.get("/:id/invitations", isAuth, getEventInvitations);
 router.get("/published", isAuth, getEventsPerPage);
 router.get("/:id", isAuth, getEventById);
 router.get("/user/:id", isAuth, getUserEvents);
+router.get("/user/:id/profile", isAuth, getUserProfileEvents);
 router.put("/edit", isAuth, editEvent);
 router.put("/image/:id", isAuth, changeEventImage);
 router.put("/change_status/:id", isAuth, changeEventPublishStatus);
@@ -58,6 +59,21 @@ async function getEventById(req, res, next) {
 async function getUserEvents(req, res, next) {
   try {
     const events = await eventService.getUserEvents(req.params.id);
+    events
+      ? res.json({
+          message: "user's event retrieved successfully",
+          data: events,
+          code: 115
+        })
+      : res.sendStatus(404);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getUserProfileEvents(req, res, next) {
+  try {
+    const events = await eventService.getUserProfileEvents(req.params.id);
     events
       ? res.json({
           message: "user's event retrieved successfully",

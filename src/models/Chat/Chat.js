@@ -9,7 +9,8 @@ const ChatSchema = new Schema({
       ref: "User"
     }
   ],
-  messages: [Message]
+  messages: [Message],
+  createdAt: Date
 });
 
 ChatSchema.set("toJSON", { virtuals: true });

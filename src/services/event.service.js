@@ -67,6 +67,34 @@ class EventService {
     return events;
   }
 
+  async getUserProfileEvents(host) {
+    const hostUser = await User.findById(host);
+    if (!hostUser) {
+      throw {
+        type: "not found",
+        message: "Supplied host doesn't exist",
+        code: 116
+      };
+    }
+    const events = await Event.find({ host })
+      .or([{ publish_status: "published" }, { publish_status: "finished" }])
+      .populate("host", "-password")
+      .populate("guests")
+
+      .populate("type")
+
+      .populate("modality");
+    console.log(events);
+    if (!events || events.length == 0) {
+      throw {
+        type: "not found",
+        message: "Supplied host has no events",
+        code: 117
+      };
+    }
+    return events;
+  }
+
   async getEventsPerPage(query) {
     console.log(query);
     let perPage = 10;

@@ -7,6 +7,7 @@ const { isAuth } = require("../middlewares/auth.middleware");
 
 router.get("/event/:id", isAuth, getSingleEventStats);
 router.get("/user/:id/events", isAuth, getUserEventsStats);
+router.get("/admin/events", isAuth, getAdminEventsStats);
 
 module.exports = router;
 
@@ -24,6 +25,15 @@ async function getUserEventsStats(req, res, next) {
   console.log(req.params.id);
   try {
     const response = await statisticsService.getUserEventsStats(req.params.id);
+    res.json({ type: "success", data: response });
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getAdminEventsStats(req, res, next) {
+  try {
+    const response = await statisticsService.getAdminEventsStats();
     res.json({ type: "success", data: response });
   } catch (err) {
     next(err);

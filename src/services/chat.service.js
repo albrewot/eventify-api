@@ -28,7 +28,9 @@ class chatService {
           data: notFound
         };
       }
-      let chat = await Chat.create({ members });
+      let createdAt = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+      console.log(createdAt);
+      let chat = await Chat.create({ members, createdAt });
       chat = await chat
         .populate("members", "id name lastName avatar username")
         .execPopulate();
@@ -50,6 +52,9 @@ class chatService {
       if (!chat) {
         throw { type: "not found", message: "chat was not found" };
       }
+      let createdAt = moment(Date.now()).format("YYYY-MM-DD HH:mm:ss");
+      console.log("HHHHHHHHHHHHHHHHHHH", createdAt);
+      Object.assign(messages, { createdAt });
       Object.assign(chat, { messages: [...chat.messages, messages] });
       return await chat.save();
     } catch (err) {

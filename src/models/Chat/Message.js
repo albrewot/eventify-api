@@ -10,7 +10,8 @@ const MessageSchema = new Schema({
   body: {
     type: String,
     required: [true, "missing Message Body"]
-  }
+  },
+  createdAt: Date
 });
 
 MessageSchema.set("toJSON", { virtuals: true });
