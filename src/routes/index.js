@@ -6,6 +6,7 @@ const eventController = require("../controllers/events.controller");
 const chatController = require("../controllers/chat.controller");
 const countryController = require("../controllers/countries.controller");
 const referenceController = require("../controllers/references.controller");
+const statisticsController = require("../controllers/statistics.controller");
 
 module.exports = app => {
   app.get("/", (req, res) => {
@@ -20,6 +21,7 @@ module.exports = app => {
   app.use("/api/references", referenceController);
   app.use("/api/countries", countryController);
   app.use("/api/chats", chatController);
+  app.use("/api/stats", statisticsController);
 
   //Not found
   app.use(router);

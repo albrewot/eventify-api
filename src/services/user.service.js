@@ -108,14 +108,16 @@ class UserService {
     let editedUser = await user.save();
     editedUser = await editedUser
       .populate("followers")
+      .populate("country")
       .populate("following")
       .populate("chats")
       .populate({
         path: "event_signups",
         select: "id _id name image country city type",
-        populate: { path: "type country", select: "name" }
+        populate: { path: "type country", select: "name _id id" }
       })
       .execPopulate();
+    console.log("POPULATE EDIT", editedUser);
     const { password, ...editted } = editedUser.toObject();
     return editted;
   }

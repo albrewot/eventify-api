@@ -28,7 +28,15 @@ const checkRestrictions = (restrictions, genre, birthDate) => {
     case "genre":
       let genreCheck = false;
       for (let arrGenre of restrictions.restrictTo) {
+        console.log(
+          arrGenre.toString(),
+          genre.toString(),
+          arrGenre.toString() === genre.toString()
+        );
         genreCheck = arrGenre.toString() === genre.toString();
+        if (genreCheck) {
+          break;
+        }
       }
       check = genreCheck;
       if (check === false) {
