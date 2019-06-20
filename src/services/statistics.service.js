@@ -50,10 +50,12 @@ class StatisticsService {
     }
 
     Object.assign(stats, { genderCount, ageAvg });
-    return { event, stats };
+    return { stats };
   }
 
   async getUserEventsStats(host) {
+    let stats = {};
+    let guestSum = 0;
     const events = await Event.aggregate([
       {
         $lookup: {
@@ -65,10 +67,15 @@ class StatisticsService {
       },
       { $match: { host: new mongoose.Types.ObjectId(host) } }
     ]);
-    const e = await Event.find({ host });
-    console.log(events);
-    console.log("find ho", e);
-    return events;
+
+    for (let event of events) {
+      const eventGuest = event.guests.length;
+      guestSum = guestSum + eventGuest;
+    }
+
+    const eventNum = events.length;
+    Object.assign(stats, { eventNum });
+    return { stats };
   }
 }
 

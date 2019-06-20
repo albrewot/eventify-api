@@ -170,7 +170,7 @@ class UserService {
       .where("active")
       .equals(true)
       .populate("user")
-      .populate("event", "name", "image");
+      .populate("event", "name image");
     if (invitations) {
       return invitations;
     } else {
